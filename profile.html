@@ -1,0 +1,1106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080816">
+  <title>My Gamer Profile | PixelRush</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --bg: #080816;
+      --panel: rgba(20, 20, 45, .82);
+      --purple: #a855f7;
+      --blue: #38bdf8;
+      --green: #4ade80;
+      --text: #f5f3ff;
+      --muted: #aaa9c8;
+      --border: rgba(168, 85, 247, .24);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      background:
+        radial-gradient(ellipse at 10% 0%, #29114d 0%, transparent 36%),
+        radial-gradient(ellipse at 100% 80%, #092c50 0%, transparent 35%),
+        var(--bg);
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    .ambient {
+      position: fixed;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      filter: blur(110px);
+      opacity: .2;
+      z-index: -1;
+      pointer-events: none;
+      animation: glowFloat 10s ease-in-out infinite alternate;
+    }
+
+    .glow-one {
+      background: #a855f7;
+      top: 10%;
+      left: -140px;
+    }
+
+    .glow-two {
+      background: #0284c7;
+      right: -150px;
+      bottom: 0;
+      animation-delay: -4s;
+    }
+
+    @keyframes glowFloat {
+      to { transform: translate(60px, 70px) scale(1.2); }
+    }
+
+    /* NAVBAR */
+
+    .navbar {
+      min-height: 76px;
+      padding: 15px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 22px;
+      border-bottom: 1px solid #ffffff0d;
+      background: #080816ad;
+      backdrop-filter: blur(18px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      animation: slideDown .65s ease both;
+    }
+
+    .logo {
+      font: 800 22px 'Orbitron', sans-serif;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .logo span {
+      color: var(--purple);
+      text-shadow: 0 0 18px #a855f777;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 26px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: 12px;
+      transition: .25s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #d8b4fe;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .level-chip {
+      border: 1px solid var(--border);
+      background: #a855f714;
+      border-radius: 30px;
+      padding: 8px 12px;
+      color: #d8b4fe;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    /* PAGE */
+
+    .container {
+      width: min(1150px, 92%);
+      margin: 38px auto 60px;
+    }
+
+    .page-heading {
+      margin-bottom: 25px;
+      animation: fadeUp .7s ease both;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 10px;
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+    }
+
+    .page-heading h1 {
+      font: 700 clamp(25px, 4vw, 37px) 'Orbitron', sans-serif;
+    }
+
+    .page-heading h1 span {
+      color: #c084fc;
+    }
+
+    .page-heading p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 9px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 15px 55px #0003;
+      animation: fadeUp .75s ease both;
+    }
+
+    /* PROFILE CARD */
+
+    .profile-card {
+      overflow: hidden;
+      position: relative;
+      animation-delay: .08s;
+    }
+
+    .cover {
+      height: 135px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 25% 25%, #c084fc88, transparent 35%),
+        radial-gradient(circle at 80% 80%, #38bdf888, transparent 40%),
+        linear-gradient(130deg, #261047, #101c3b, #17112b);
+    }
+
+    .cover::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .18;
+      background-image:
+        linear-gradient(#ffffff30 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff30 1px, transparent 1px);
+      background-size: 28px 28px;
+      transform: perspective(200px) rotateX(20deg) scale(1.3);
+      animation: gridMove 8s linear infinite;
+    }
+
+    @keyframes gridMove {
+      to { background-position: 28px 28px; }
+    }
+
+    .avatar-wrap {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      margin: -57px auto 15px;
+      border-radius: 50%;
+      padding: 4px;
+      background: linear-gradient(135deg, #c084fc, #38bdf8);
+      box-shadow: 0 0 30px #a855f74d;
+      animation: avatarPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes avatarPulse {
+      50% { box-shadow: 0 0 42px #a855f766; }
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #17152d;
+      font-size: 47px;
+      border: 3px solid #17152d;
+    }
+
+    .profile-body {
+      padding: 0 24px 25px;
+      text-align: center;
+    }
+
+    .gamer-name {
+      font: 700 21px 'Orbitron', sans-serif;
+      overflow-wrap: anywhere;
+    }
+
+    .user-tag {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 7px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 16px 0;
+      padding: 7px 12px;
+      border-radius: 30px;
+      border: 1px solid #4ade8033;
+      background: #4ade800d;
+      color: #86efac;
+      font-size: 10px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--green);
+    }
+
+    .bio {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .profile-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn {
+      min-height: 42px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #a855f714;
+      color: #e9d5ff;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .25s, background .25s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      background: #a855f72b;
+    }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(110deg, #9333ea, #6366f1);
+      border-color: transparent;
+    }
+
+    .btn.danger {
+      background: #ef44440c;
+      border-color: #ef444433;
+      color: #fca5a5;
+    }
+
+    /* XP CARD */
+
+    .xp-card {
+      padding: 23px;
+      margin-top: 20px;
+      animation-delay: .16s;
+    }
+
+    .section-title {
+      font: 600 14px 'Orbitron', sans-serif;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 6px;
+    }
+
+    .xp-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .level-number {
+      font: 700 25px 'Orbitron', sans-serif;
+      color: #c084fc;
+    }
+
+    .xp-label {
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 5px;
+    }
+
+    .xp-value {
+      font-size: 11px;
+      color: var(--blue);
+      text-align: right;
+    }
+
+    .progress {
+      height: 9px;
+      background: #ffffff10;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 17px;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #9333ea, #38bdf8);
+      box-shadow: 0 0 15px #a855f766;
+      animation: fillXP 1.5s .4s ease forwards;
+    }
+
+    @keyframes fillXP {
+      to { width: var(--xp-width); }
+    }
+
+    .xp-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    /* RIGHT SIDE */
+
+    .right-column {
+      display: grid;
+      gap: 20px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .stat-card {
+      padding: 20px 15px;
+      min-width: 0;
+      animation: fadeUp .7s ease both;
+      transition: transform .25s, border-color .25s;
+    }
+
+    .stat-card:nth-child(2) { animation-delay: .1s; }
+    .stat-card:nth-child(3) { animation-delay: .2s; }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      border-color: #a855f766;
+    }
+
+    .stat-icon {
+      width: 39px;
+      height: 39px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: #a855f718;
+      font-size: 19px;
+      margin-bottom: 19px;
+    }
+
+    .stat-number {
+      font: 700 clamp(18px, 2.4vw, 27px) 'Orbitron', sans-serif;
+      overflow-wrap: anywhere;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 8px;
+    }
+
+    .stat-trend {
+      color: #86efac;
+      font-size: 10px;
+      margin-top: 10px;
+    }
+
+    /* RECENT GAMES */
+
+    .games-panel {
+      padding: 24px;
+      animation-delay: .2s;
+    }
+
+    .panel-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 21px;
+    }
+
+    .text-link {
+      color: #c084fc;
+      font-size: 11px;
+    }
+
+    .text-link:hover {
+      color: var(--blue);
+    }
+
+    .game-row {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 13px;
+      padding: 15px 0;
+      border-bottom: 1px solid #ffffff0d;
+      transition: padding .2s;
+    }
+
+    .game-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .game-row:hover {
+      padding-left: 5px;
+    }
+
+    .game-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      font-size: 24px;
+      background: linear-gradient(135deg, #a855f71b, #38bdf81b);
+    }
+
+    .game-name {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .game-meta {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    .score {
+      font: 600 12px 'Orbitron', sans-serif;
+      color: #c084fc;
+      text-align: right;
+    }
+
+    .score-label {
+      font: 10px 'Poppins', sans-serif;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    /* ACHIEVEMENTS */
+
+    .achievements-panel {
+      padding: 24px;
+      animation-delay: .28s;
+    }
+
+    .achievement-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .achievement {
+      min-width: 0;
+      text-align: center;
+      padding: 17px 7px;
+      border: 1px solid #ffffff10;
+      border-radius: 13px;
+      background: #ffffff04;
+      transition: .25s;
+    }
+
+    .achievement:hover {
+      border-color: #a855f766;
+      transform: translateY(-4px);
+      background: #a855f70d;
+    }
+
+    .achievement-icon {
+      font-size: 27px;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 8px #a855f744);
+    }
+
+    .achievement-name {
+      font-size: 10px;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .achievement-status {
+      color: var(--muted);
+      font-size: 9px;
+      margin-top: 6px;
+    }
+
+    .achievement.locked {
+      opacity: .45;
+      filter: grayscale(1);
+    }
+
+    .notice {
+      display: none;
+      padding: 13px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 15px;
+      overflow-wrap: anywhere;
+    }
+
+    .notice.show {
+      display: block;
+      animation: fadeUp .25s ease both;
+    }
+
+    .notice.error {
+      color: #fca5a5;
+      background: #ef444415;
+      border: 1px solid #ef444433;
+    }
+
+    .notice.success {
+      color: #86efac;
+      background: #22c55e12;
+      border: 1px solid #22c55e33;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #77758f;
+      font-size: 11px;
+      border-top: 1px solid #ffffff0b;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 950px) {
+      .layout {
+        grid-template-columns: 290px minmax(0, 1fr);
+        gap: 15px;
+      }
+
+      .nav-links {
+        gap: 14px;
+      }
+
+      .achievement-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .navbar {
+        padding: 15px 4%;
+        flex-wrap: wrap;
+      }
+
+      .nav-links {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        padding-top: 9px;
+        border-top: 1px solid #ffffff0c;
+      }
+
+      .nav-links a {
+        font-size: 11px;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        margin-top: 27px;
+      }
+
+      .profile-card {
+        max-width: 460px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .xp-card {
+        max-width: 460px;
+        width: 100%;
+        margin: 18px auto 0;
+      }
+
+      .stats-grid {
+        gap: 9px;
+      }
+
+      .stat-card {
+        padding: 15px 11px;
+      }
+
+      .games-panel,
+      .achievements-panel {
+        padding: 19px;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .logo {
+        font-size: 17px;
+      }
+
+      .level-chip {
+        font-size: 9px;
+        padding: 7px 9px;
+      }
+
+      .nav-links {
+        gap: 12px;
+      }
+
+      .nav-links a {
+        font-size: 10px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-card {
+        display: grid;
+        grid-template-columns: 42px 1fr;
+        align-items: center;
+        column-gap: 12px;
+      }
+
+      .stat-icon {
+        grid-row: span 2;
+        margin: 0;
+      }
+
+      .stat-number {
+        font-size: 20px;
+      }
+
+      .stat-label {
+        margin-top: 3px;
+      }
+
+      .achievement-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ambient glow-one"></div>
+  <div class="ambient glow-two"></div>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">PIXEL<span>RUSH</span></a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="games.html">Games</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="profile.html" class="active">Profile</a>
+    </nav>
+
+    <div class="nav-right">
+      <div class="level-chip">⚡ LEVEL <span id="navLevel">12</span></div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="page-heading">
+      <div class="eyebrow">PLAYER CONTROL CENTER</div>
+      <h1>GAMER <span>PROFILE</span></h1>
+      <p>Your stats, your achievements, your gaming journey.</p>
+    </section>
+
+    <div class="layout">
+
+      <!-- LEFT COLUMN -->
+
+      <aside>
+        <section class="panel profile-card">
+          <div class="cover"></div>
+
+          <div class="avatar-wrap">
+            <div class="avatar" id="avatarDisplay">🎮</div>
+          </div>
+
+          <div class="profile-body">
+            <h2 class="gamer-name" id="displayName">ShadowPlayer</h2>
+            <p class="user-tag" id="displayTag">@pixel_player</p>
+
+            <div class="status">
+              <span class="status-dot"></span>
+              DEMO PLAYER
+            </div>
+
+            <p class="bio" id="displayBio">
+              Gaming enthusiast. Chasing high scores and unlocking new achievements.
+            </p>
+
+            <div class="profile-actions">
+              <button class="btn primary" id="editBtn" type="button">
+                ✎ Edit Profile
+              </button>
+              <button class="btn" id="avatarBtn" type="button">
+                ◉ Change Avatar
+              </button>
+            </div>
+
+            <div class="notice" id="profileNotice" role="status"
+                 aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section class="panel xp-card">
+          <h3 class="section-title">⚡ EXPERIENCE</h3>
+          <p class="section-subtitle">Keep playing to reach the next level.</p>
+
+          <div class="xp-head">
+            <div>
+              <div class="level-number">LVL <span id="levelValue">12</span></div>
+              <div class="xp-label">CURRENT LEVEL</div>
+            </div>
+            <div>
+              <div class="xp-value" id="xpText">2,450 / 3,000 XP</div>
+              <div class="xp-label" style="text-align:right">NEXT LEVEL</div>
+            </div>
+          </div>
+
+          <div class="progress">
+            <div class="progress-fill" id="xpBar"
+                 style="--xp-width:81.67%"></div>
+          </div>
+
+          <div class="xp-footer">
+            <span id="xpRemaining">550 XP remaining</span>
+            <span>🚀 Keep going!</span>
+          </div>
+        </section>
+      </aside>
+
+      <!-- RIGHT COLUMN -->
+
+      <div class="right-column">
+
+        <section class="stats-grid">
+          <article class="panel stat-card">
+            <div class="stat-icon">🎮</div>
+            <div class="stat-number" id="gamesPlayed">48</div>
+            <div class="stat-label">GAMES PLAYED</div>
+            <div class="stat-trend">Your game history</div>
+          </article>
+
+          <article class="panel stat-card">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-number" id="totalWins">32</div>
+            <div class="stat-label">BEST RESULTS</div>
+            <div class="stat-trend">Personal records</div>
+          </article>
+
+          <article class="panel stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-number" id="totalXP">2,450</div>
+            <div class="stat-label">TOTAL XP</div>
+            <div class="stat-trend">Experience earned</div>
+          </article>
+        </section>
+
+        <section class="panel games-panel">
+          <div class="panel-heading">
+            <div>
+              <h3 class="section-title">RECENT GAMES</h3>
+              <p class="section-subtitle">Your latest gaming activity</p>
+            </div>
+            <a class="text-link" href="games.html">All Games →</a>
+          </div>
+
+          <div id="recentGames">
+            <div class="game-row">
+              <div class="game-icon">🐍</div>
+              <div>
+                <div class="game-name">Snake Classic</div>
+                <div class="game-meta">Personal best · Demo record</div>
+              </div>
+              <div class="score">
+                1,250
+                <div class="score-label">POINTS</div>
+              </div>
+            </div>
+
+            <div class="game-row">
+              <div class="game-icon">⭕</div>
+              <div>
+                <div class="game-name">Tic-Tac-Toe</div>
+                <div class="game-meta">Personal best · Demo record</div>
+              </div>
+              <div class="score">
+                850
+                <div class="score-label">POINTS</div>
+              </div>
+            </div>
+
+            <div class="game-row">
+              <div class="game-icon">🧠</div>
+              <div>
+                <div class="game-name">Memory Match</div>
+                <div class="game-meta">Personal best · Demo record</div>
+              </div>
+              <div class="score">
+                1,600
+                <div class="score-label">POINTS</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel achievements-panel">
+          <div class="panel-heading">
+            <div>
+              <h3 class="section-title">ACHIEVEMENTS</h3>
+              <p class="section-subtitle">Milestones on your gaming journey</p>
+            </div>
+            <span class="level-chip" id="achievementCount">3 / 4 UNLOCKED</span>
+          </div>
+
+          <div class="achievement-grid" id="achievementGrid">
+            <div class="achievement">
+              <div class="achievement-icon">🔥</div>
+              <div class="achievement-name">First Steps</div>
+              <div class="achievement-status">Unlocked</div>
+            </div>
+
+            <div class="achievement">
+              <div class="achievement-icon">🎯</div>
+              <div class="achievement-name">Score Hunter</div>
+              <div class="achievement-status">Unlocked</div>
+            </div>
+
+            <div class="achievement">
+              <div class="achievement-icon">⚡</div>
+              <div class="achievement-name">Speed Demon</div>
+              <div class="achievement-status">Unlocked</div>
+            </div>
+
+            <div class="achievement locked">
+              <div class="achievement-icon">👑</div>
+              <div class="achievement-name">Legend</div>
+              <div class="achievement-status">Locked</div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © <span id="year"></span> PixelRush Gaming · Keep Playing, Keep Winning.
+  </footer>
+
+  <script>
+    /*
+      DEMO PROFILE
+      Replace this object with Firebase user data later.
+      The profile and scores below are sample data.
+    */
+
+    const demoProfile = {
+      username: "ShadowPlayer",
+      tag: "@pixel_player",
+      bio: "Gaming enthusiast. Chasing high scores and unlocking new achievements.",
+      avatar: "🎮",
+      level: 12,
+      xp: 2450,
+      nextLevelXP: 3000,
+      gamesPlayed: 48,
+      wins: 32,
+      recentGames: [
+        { name: "Snake Classic", icon: "🐍", score: 1250 },
+        { name: "Tic-Tac-Toe", icon: "⭕", score: 850 },
+        { name: "Memory Match", icon: "🧠", score: 1600 }
+      ]
+    };
+
+    const $ = id => document.getElementById(id);
+
+    function renderProfile(profile) {
+      $("displayName").textContent = profile.username;
+      $("displayTag").textContent = profile.tag;
+      $("displayBio").textContent = profile.bio;
+      $("avatarDisplay").textContent = profile.avatar;
+
+      $("navLevel").textContent = profile.level;
+      $("levelValue").textContent = profile.level;
+
+      $("xpText").textContent =
+        `${profile.xp.toLocaleString()} / ${profile.nextLevelXP.toLocaleString()} XP`;
+
+      $("totalXP").textContent = profile.xp.toLocaleString();
+      $("gamesPlayed").textContent = profile.gamesPlayed;
+      $("totalWins").textContent = profile.wins;
+
+      const percentage = Math.min(
+        100,
+        Math.max(0, (profile.xp / profile.nextLevelXP) * 100)
+      );
+
+      $("xpBar").style.setProperty("--xp-width", percentage + "%");
+      $("xpRemaining").textContent =
+        `${Math.max(0, profile.nextLevelXP - profile.xp).toLocaleString()} XP remaining`;
+
+      $("recentGames").replaceChildren();
+
+      profile.recentGames.forEach(game => {
+        const row = document.createElement("div");
+        row.className = "game-row";
+
+        const icon = document.createElement("div");
+        icon.className = "game-icon";
+        icon.textContent = game.icon;
+
+        const details = document.createElement("div");
+
+        const name = document.createElement("div");
+        name.className = "game-name";
+        name.textContent = game.name;
+
+        const meta = document.createElement("div");
+        meta.className = "game-meta";
+        meta.textContent = "Personal best · Demo record";
+
+        details.append(name, meta);
+
+        const score = document.createElement("div");
+        score.className = "score";
+        score.append(document.createTextNode(game.score.toLocaleString()));
+
+        const label = document.createElement("div");
+        label.className = "score-label";
+        label.textContent = "POINTS";
+
+        score.append(label);
+        row.append(icon, details, score);
+        $("recentGames").append(row);
+      });
+    }
+
+    function notify(text, type = "success") {
+      const notice = $("profileNotice");
+      notice.textContent = text;
+      notice.className = "notice show " + type;
+    }
+
+    $("editBtn").addEventListener("click", () => {
+      const newName = prompt(
+        "Enter a gamer name (3–20 characters):",
+        demoProfile.username
+      );
+
+      if (newName === null) return;
+
+      const cleanName = newName.trim();
+
+      if (cleanName.length < 3 || cleanName.length > 20) {
+        notify("Gamer name must contain 3–20 characters.", "error");
+        return;
+      }
+
+      demoProfile.username = cleanName;
+      demoProfile.tag = "@" + cleanName.replace(/[^a-zA-Z0-9_]/g, "_")
+        .toLowerCase();
+
+      renderProfile(demoProfile);
+      notify("Demo profile updated. Changes are not saved to an account.");
+    });
+
+    const avatars = ["🎮", "👾", "🦊", "🐉", "🤖", "🚀", "😎"];
+
+    $("avatarBtn").addEventListener("click", () => {
+      const current = avatars.indexOf(demoProfile.avatar);
+      demoProfile.avatar = avatars[(current + 1) % avatars.length];
+      renderProfile(demoProfile);
+      notify("Demo avatar changed. It is not saved to an account.");
+    });
+
+    $("year").textContent = new Date().getFullYear();
+    renderProfile(demoProfile);
+  </script>
+</body>
+</html>

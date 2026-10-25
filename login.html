@@ -1,0 +1,833 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080b16">
+    <meta name="description" content="Sign in to PixelRush and unlock your favorite games.">
+
+    <title>Login | PixelRush</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #080b16;
+            --card: #101626;
+            --purple: #9b7bff;
+            --cyan: #52e5ff;
+            --text: #f3f5ff;
+            --muted: #929bb3;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        button, input {
+            font: inherit;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .background {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(150,160,210,.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(150,160,210,.04) 1px, transparent 1px);
+            background-size: 45px 45px;
+        }
+
+        .glow {
+            position: absolute;
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            filter: blur(110px);
+            opacity: .2;
+        }
+
+        .glow-one {
+            background: #7045ff;
+            top: 10%;
+            left: -180px;
+        }
+
+        .glow-two {
+            background: #00c9ee;
+            bottom: -150px;
+            right: -130px;
+        }
+
+        /* Navigation */
+
+        header {
+            position: relative;
+            z-index: 2;
+            width: min(1200px, calc(100% - 40px));
+            margin: auto;
+            padding: 22px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            font-size: 19px;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #b39bff, #6545f5);
+            box-shadow: 0 0 25px #8b68ff45;
+            font-size: 22px;
+        }
+
+        .brand span:last-child span {
+            color: var(--purple);
+        }
+
+        .home-link {
+            color: var(--muted);
+            font-size: 14px;
+            transition: color .2s;
+        }
+
+        .home-link:hover {
+            color: white;
+        }
+
+        /* Main layout */
+
+        main {
+            position: relative;
+            z-index: 1;
+            width: min(1100px, calc(100% - 40px));
+            min-height: calc(100vh - 135px);
+            margin: auto;
+            padding: 55px 0;
+            display: grid;
+            grid-template-columns: 1fr minmax(340px, 450px);
+            gap: 75px;
+            align-items: center;
+        }
+
+        /* Left content */
+
+        .intro {
+            animation: slideIn .7s ease both;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 10px 13px;
+            border: 1px solid #9b7bff45;
+            border-radius: 8px;
+            color: #c9baff;
+            background: #9b7bff0d;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            background: var(--cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--cyan);
+        }
+
+        .intro h1 {
+            margin: 27px 0 20px;
+            font-size: clamp(42px, 5vw, 68px);
+            line-height: 1.08;
+            letter-spacing: -2px;
+        }
+
+        .intro h1 span {
+            color: var(--purple);
+            text-shadow: 0 0 35px #9b7bff35;
+        }
+
+        .intro-description {
+            max-width: 450px;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.9;
+        }
+
+        .game-preview {
+            margin-top: 35px;
+            padding: 19px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: #ffffff05;
+            transition: transform .25s, border-color .25s;
+        }
+
+        .game-preview:hover {
+            transform: translateY(-4px);
+            border-color: #9b7bff70;
+        }
+
+        .preview-icon {
+            width: 57px;
+            height: 57px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #9b7bff30, #52e5ff18);
+            font-size: 27px;
+        }
+
+        .preview-info small {
+            color: var(--cyan);
+            font-size: 10px;
+            letter-spacing: 1.3px;
+        }
+
+        .preview-info h3 {
+            margin: 6px 0;
+            font-size: 15px;
+        }
+
+        .preview-info p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .preview-arrow {
+            margin-left: auto;
+            color: var(--purple);
+            font-size: 22px;
+        }
+
+        /* Login card */
+
+        .login-card {
+            padding: 32px;
+            border: 1px solid #ffffff16;
+            border-radius: 22px;
+            background: linear-gradient(145deg, #131b2d, #0d1220);
+            box-shadow: 0 30px 90px #0007, 0 0 50px #8c6bff0b;
+            animation: cardAppear .75s ease both;
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .mini-logo {
+            width: 43px;
+            height: 43px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #b39bff, #6545f5);
+            font-size: 16px;
+            font-weight: 900;
+        }
+
+        .secure-label {
+            color: var(--muted);
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        .secure-label span {
+            color: #58edb1;
+            margin-right: 5px;
+        }
+
+        .eyebrow {
+            color: var(--cyan);
+            font-size: 10px;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        .card-heading h2 {
+            margin: 12px 0 9px;
+            font-size: 27px;
+            letter-spacing: -.7px;
+        }
+
+        .card-heading h2 span {
+            color: var(--purple);
+        }
+
+        .card-heading > p:last-child {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* Messages */
+
+        .message {
+            display: none;
+            margin-top: 20px;
+            padding: 12px 14px;
+            border-radius: 9px;
+            font-size: 12px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .message[data-type="error"] {
+            display: block;
+            color: #ffb3bd;
+            border: 1px solid #ff647733;
+            background: #ff647711;
+        }
+
+        .message[data-type="success"] {
+            display: block;
+            color: #7af0bb;
+            border: 1px solid #58edb133;
+            background: #58edb111;
+        }
+
+        .message:empty {
+            display: none;
+        }
+
+        /* Form */
+
+        .login-form {
+            margin-top: 27px;
+        }
+
+        .form-group {
+            margin-bottom: 21px;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #e4e8f5;
+            font-size: 12px;
+            font-weight: 650;
+        }
+
+        .forgot-link {
+            margin-bottom: 10px;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: var(--purple);
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .forgot-link:hover {
+            color: var(--cyan);
+        }
+
+        .input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            min-height: 51px;
+            padding: 0 14px;
+            border: 1px solid #ffffff15;
+            border-radius: 10px;
+            background: #080c17;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .input-wrap:focus-within {
+            border-color: var(--purple);
+            box-shadow: 0 0 0 3px #9b7bff18;
+        }
+
+        .input-icon {
+            color: #8c95ad;
+            font-size: 16px;
+        }
+
+        .input-wrap input {
+            min-width: 0;
+            width: 100%;
+            padding: 14px 0;
+            outline: none;
+            border: none;
+            color: white;
+            background: transparent;
+            font-size: 13px;
+        }
+
+        .input-wrap input::placeholder {
+            color: #69738b;
+        }
+
+        .password-toggle {
+            border: 0;
+            background: transparent;
+            color: var(--cyan);
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .submit-button {
+            width: 100%;
+            min-height: 52px;
+            margin-top: 5px;
+            padding: 0 17px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 0;
+            border-radius: 10px;
+            color: white;
+            background: linear-gradient(100deg, #8b65f8, #6243e9);
+            box-shadow: 0 8px 24px #7955f42b;
+            font-size: 13px;
+            font-weight: 750;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px #7955f44d;
+        }
+
+        .submit-button:disabled {
+            opacity: .65;
+            cursor: wait;
+            transform: none;
+        }
+
+        .submit-arrow {
+            font-size: 20px;
+            transition: transform .2s;
+        }
+
+        .submit-button:hover .submit-arrow {
+            transform: translateX(4px);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin: 26px 0 21px;
+            color: #69738b;
+            font-size: 9px;
+            letter-spacing: 1.5px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .register-text {
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .register-text a {
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        .register-text a:hover {
+            text-decoration: underline;
+        }
+
+        .card-bottom {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 30px;
+            padding-top: 17px;
+            border-top: 1px solid var(--border);
+            color: #69738b;
+            font-size: 9px;
+            letter-spacing: 1px;
+        }
+
+        .auth-note {
+            margin-top: 18px;
+            color: #707a92;
+            text-align: center;
+            font-size: 10px;
+            line-height: 1.7;
+        }
+
+        footer {
+            position: relative;
+            z-index: 1;
+            width: min(1200px, calc(100% - 40px));
+            margin: auto;
+            padding: 18px 0;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            border-top: 1px solid var(--border);
+            color: #788198;
+            font-size: 11px;
+        }
+
+        footer a:hover {
+            color: white;
+        }
+
+        /* Animations */
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(.985);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
+        }
+
+        /* Responsive */
+
+        @media (max-width: 850px) {
+            main {
+                grid-template-columns: 1fr;
+                gap: 38px;
+                width: min(480px, calc(100% - 32px));
+                padding: 40px 0;
+            }
+
+            .intro {
+                text-align: center;
+            }
+
+            .intro-description {
+                margin: auto;
+            }
+
+            .intro h1 {
+                font-size: clamp(40px, 9vw, 58px);
+            }
+
+            .game-preview {
+                text-align: left;
+            }
+
+            .login-card {
+                padding: 27px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                width: calc(100% - 30px);
+                padding: 17px 0;
+            }
+
+            .brand {
+                gap: 8px;
+                font-size: 15px;
+            }
+
+            .brand-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .home-link {
+                font-size: 12px;
+            }
+
+            main {
+                width: calc(100% - 30px);
+                padding: 35px 0;
+            }
+
+            .intro h1 {
+                font-size: 39px;
+                letter-spacing: -1.5px;
+            }
+
+            .intro-description {
+                font-size: 13px;
+            }
+
+            .game-preview {
+                padding: 14px;
+            }
+
+            .preview-icon {
+                width: 46px;
+                height: 46px;
+            }
+
+            .login-card {
+                padding: 22px 18px;
+                border-radius: 17px;
+            }
+
+            .card-heading h2 {
+                font-size: 24px;
+            }
+
+            .card-bottom {
+                font-size: 8px;
+            }
+
+            footer {
+                width: calc(100% - 30px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="background" aria-hidden="true">
+        <div class="glow glow-one"></div>
+        <div class="glow glow-two"></div>
+    </div>
+
+    <header>
+        <a href="index.html" class="brand">
+            <span class="brand-icon">P</span>
+            <span>PIXEL<span>RUSH</span></span>
+        </a>
+
+        <a href="index.html" class="home-link">← Back to Home</a>
+    </header>
+
+    <main>
+
+        <section class="intro">
+            <div class="badge">
+                <span class="dot"></span>
+                YOUR NEXT LEVEL STARTS HERE
+            </div>
+
+            <h1>
+                PLAY HARD.<br>
+                <span>RISE HIGHER.</span>
+            </h1>
+
+            <p class="intro-description">
+                Welcome to PixelRush. Discover exciting games,
+                challenge yourself and improve your scores.
+                Sign in to enter the gaming arena.
+            </p>
+
+            <div class="game-preview">
+                <div class="preview-icon">🎮</div>
+
+                <div class="preview-info">
+                    <small>PLAYER ACCESS</small>
+                    <h3>Your gaming journey awaits</h3>
+                    <p>Sign in to unlock gameplay.</p>
+                </div>
+
+                <span class="preview-arrow">↗</span>
+            </div>
+        </section>
+
+        <section>
+            <div class="login-card">
+
+                <div class="card-top">
+                    <div class="mini-logo">PR</div>
+                    <div class="secure-label">
+                        <span>●</span> SECURE SIGN IN
+                    </div>
+                </div>
+
+                <div class="card-heading">
+                    <p class="eyebrow">WELCOME BACK</p>
+                    <h2>Login to <span>PixelRush</span></h2>
+                    <p>Enter your account details to continue.</p>
+                </div>
+
+                <div
+                    id="authMessage"
+                    class="message"
+                    data-auth-message
+                    role="status"
+                    aria-live="polite"
+                    hidden>
+                </div>
+
+                <form id="loginForm" class="login-form">
+
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+
+                        <div class="input-wrap">
+                            <span class="input-icon" aria-hidden="true">✉</span>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="label-row">
+                            <label for="password">Password</label>
+
+                            <button
+                                type="button"
+                                class="forgot-link"
+                                id="forgotPassword">
+                                Forgot password?
+                            </button>
+                        </div>
+
+                        <div class="input-wrap">
+                            <span class="input-icon" aria-hidden="true">🔒</span>
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required>
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="togglePassword"
+                                aria-label="Show password"
+                                aria-pressed="false">
+                                Show
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-button">
+                        <span>Login to Account</span>
+                        <span class="submit-arrow">→</span>
+                    </button>
+
+                    <div class="divider">PLAYER ACCESS</div>
+
+                    <p class="register-text">
+                        New to PixelRush?
+                        <a href="register.html">Create an account</a>
+                    </p>
+
+                </form>
+
+                <div class="card-bottom">
+                    <span>PIXELRUSH</span>
+                    <span>LEVEL UP YOUR GAME</span>
+                </div>
+
+            </div>
+
+            <p class="auth-note">
+                Use your registered account to access playable games.
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        <span>© 2026 PixelRush</span>
+        <a href="about.html">About PixelRush</a>
+    </footer>
+
+    <script>
+        const passwordInput = document.getElementById("password");
+        const togglePassword = document.getElementById("togglePassword");
+
+        togglePassword.addEventListener("click", function () {
+            const showPassword = passwordInput.type === "password";
+
+            passwordInput.type = showPassword ? "text" : "password";
+            togglePassword.textContent = showPassword ? "Hide" : "Show";
+
+            togglePassword.setAttribute(
+                "aria-pressed",
+                String(showPassword)
+            );
+
+            togglePassword.setAttribute(
+                "aria-label",
+                showPassword ? "Hide password" : "Show password"
+            );
+        });
+    </script>
+
+    <!-- Firebase login, password reset and return-to-game redirect -->
+    <script type="module" src="js/auth.js"></script>
+
+</body>
+</html>

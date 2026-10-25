@@ -1,0 +1,877 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b18">
+<title>Reaction Test | PixelRush</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #080b18;
+  --panel: #11172b;
+  --cyan: #00f5ff;
+  --green: #9cff57;
+  --pink: #ff3cac;
+  --purple: #a879ff;
+  --muted: #9aa5c5;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  color: #f3f6ff;
+  font-family: 'Poppins', sans-serif;
+  background:
+    radial-gradient(ellipse at 10% 10%, #16234b, transparent 38%),
+    radial-gradient(ellipse at 90% 85%, #341448, transparent 36%),
+    var(--bg);
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(#ffffff08 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff08 1px, transparent 1px);
+  background-size: 38px 38px;
+}
+
+.navbar {
+  min-height: 76px;
+  padding: 15px 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid #ffffff12;
+  background: #080b18dd;
+  backdrop-filter: blur(15px);
+}
+
+.logo {
+  color: var(--cyan);
+  font: 800 23px 'Orbitron', sans-serif;
+  text-decoration: none;
+  letter-spacing: 1px;
+  text-shadow: 0 0 18px #00f5ff70;
+}
+
+.logo span {
+  color: white;
+}
+
+.back-link {
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: none;
+  transition: color .25s;
+}
+
+.back-link:hover {
+  color: var(--cyan);
+}
+
+.page {
+  width: min(100% - 30px, 1020px);
+  margin: 38px auto;
+  animation: pageEnter .7s ease both;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 7px 15px;
+  border: 1px solid #00f5ff45;
+  border-radius: 30px;
+  color: var(--cyan);
+  background: #00f5ff0b;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+h1 {
+  margin: 16px 0 9px;
+  font: 800 clamp(29px, 5vw, 47px) 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+}
+
+h1 span {
+  color: var(--cyan);
+  text-shadow: 0 0 25px #00f5ff50;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(250px, .8fr);
+  gap: 23px;
+  align-items: start;
+}
+
+.panel {
+  position: relative;
+  overflow: hidden;
+  padding: 23px;
+  border: 1px solid #ffffff15;
+  border-radius: 23px;
+  background: linear-gradient(145deg, #151c33f2, #0d1225f7);
+  box-shadow: 0 20px 65px #0005;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  right: -80px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: var(--cyan);
+  filter: blur(90px);
+  opacity: .12;
+  pointer-events: none;
+}
+
+.panel-title {
+  margin-bottom: 17px;
+  font: 600 13px 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+  margin-bottom: 18px;
+}
+
+.stat {
+  padding: 13px 5px;
+  text-align: center;
+  border: 1px solid #ffffff10;
+  border-radius: 13px;
+  background: #ffffff06;
+}
+
+.stat-label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.stat-value {
+  font: 700 clamp(16px, 3vw, 22px) 'Orbitron', sans-serif;
+}
+
+#lastTime { color: var(--cyan); }
+#bestTime { color: var(--green); }
+#averageTime { color: var(--purple); }
+
+.test-arena {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 330px;
+  padding: 25px 16px;
+  border: 1px solid #ffffff15;
+  border-radius: 18px;
+  background: #090f20;
+  text-align: center;
+  overflow: hidden;
+  isolation: isolate;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background .25s, border-color .25s, box-shadow .25s;
+}
+
+.test-arena::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: .6;
+  background-image:
+    linear-gradient(#ffffff06 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff06 1px, transparent 1px);
+  background-size: 25px 25px;
+}
+
+.test-arena:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 3px;
+}
+
+.test-arena.waiting {
+  background: #35121f;
+  border-color: #ff3cac70;
+  box-shadow: inset 0 0 70px #ff3cac12;
+}
+
+.test-arena.ready {
+  background: #12351f;
+  border-color: #9cff57b0;
+  box-shadow: inset 0 0 75px #9cff571a, 0 0 25px #9cff5712;
+}
+
+.test-arena.result-state {
+  background: #10283b;
+  border-color: #00f5ff70;
+}
+
+.arena-icon {
+  margin-bottom: 20px;
+  font-size: 48px;
+  animation: float 1.8s ease-in-out infinite;
+}
+
+.arena-title {
+  font: 700 clamp(18px, 3vw, 25px) 'Orbitron', sans-serif;
+  line-height: 1.5;
+}
+
+.arena-text {
+  max-width: 310px;
+  margin-top: 12px;
+  color: #b0bad4;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.arena-title.green {
+  color: var(--green);
+  text-shadow: 0 0 22px #9cff5740;
+}
+
+.arena-title.pink {
+  color: var(--pink);
+  text-shadow: 0 0 22px #ff3cac30;
+}
+
+.arena-title.cyan {
+  color: var(--cyan);
+}
+
+.tap-hint {
+  margin-top: 24px;
+  color: #7f8aaa;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.progress-wrap {
+  margin-top: 17px;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.progress-track {
+  height: 6px;
+  border-radius: 20px;
+  background: #ffffff12;
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--cyan), var(--green));
+  transition: width .3s ease;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 17px;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px 10px;
+  border: 1px solid #ffffff20;
+  border-radius: 12px;
+  color: white;
+  background: #ffffff08;
+  font: 600 12px 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: var(--cyan);
+}
+
+.btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+.btn.primary {
+  color: #07100b;
+  background: linear-gradient(110deg, #00f5ff, #9cff57);
+  border: none;
+  box-shadow: 0 5px 20px #00f5ff20;
+}
+
+.btn.primary:hover:not(:disabled) {
+  box-shadow: 0 7px 25px #00f5ff45;
+}
+
+.btn:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 3px;
+}
+
+.info-box {
+  padding: 16px;
+  margin-top: 16px;
+  border: 1px solid #00f5ff20;
+  border-radius: 15px;
+  background: #00f5ff08;
+}
+
+.info-box h3 {
+  margin-bottom: 9px;
+  color: var(--cyan);
+  font-size: 13px;
+}
+
+.info-box p,
+.info-box li {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.info-box ul {
+  padding-left: 17px;
+}
+
+.results-list {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #ffffff06;
+  border: 1px solid #ffffff0d;
+  font-size: 11px;
+}
+
+.result-row span:first-child {
+  color: var(--muted);
+}
+
+.result-row strong {
+  color: var(--green);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+}
+
+.status-message {
+  min-height: 20px;
+  margin-top: 12px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 11px;
+}
+
+.footer {
+  padding: 26px 15px;
+  color: #77819e;
+  font-size: 11px;
+  text-align: center;
+}
+
+.footer span {
+  color: var(--cyan);
+}
+
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulseGreen {
+  0%, 100% { box-shadow: inset 0 0 45px #9cff5710, 0 0 15px #9cff5710; }
+  50% { box-shadow: inset 0 0 80px #9cff5720, 0 0 28px #9cff5725; }
+}
+
+.test-arena.ready {
+  animation: pulseGreen .65s ease-in-out infinite;
+}
+
+@media (max-width: 760px) {
+  .page { margin: 25px auto; }
+  .layout { grid-template-columns: 1fr; }
+  .panel { padding: 17px; }
+  .game-panel { max-width: 600px; width: 100%; margin: auto; }
+  .test-arena { min-height: 300px; }
+}
+
+@media (max-width: 380px) {
+  .navbar { padding: 14px 5%; }
+  .logo { font-size: 18px; }
+  .back-link { font-size: 11px; }
+  .panel { padding: 13px; }
+  .test-arena { min-height: 260px; }
+  .buttons { gap: 7px; }
+  .btn { padding: 11px 6px; font-size: 11px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<header class="navbar">
+  <a href="../index.html" class="logo">PIXEL<span>RUSH</span></a>
+  <a href="../games.html" class="back-link">← Back to Games</a>
+</header>
+
+<main class="page">
+  <section class="heading">
+    <span class="eyebrow">✦ SPEED CHALLENGE</span>
+    <h1>REACTION <span>TEST</span></h1>
+    <p class="subtitle">Wait for green. React as fast as you can!</p>
+  </section>
+
+  <section class="layout">
+    <div class="panel game-panel">
+      <h2 class="panel-title">⚡ REFLEX ARENA</h2>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-label">LAST TIME</span>
+          <span class="stat-value" id="lastTime">—</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">PERSONAL BEST</span>
+          <span class="stat-value" id="bestTime">—</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">AVERAGE</span>
+          <span class="stat-value" id="averageTime">—</span>
+        </div>
+      </div>
+
+      <div
+        class="test-arena"
+        id="arena"
+        role="button"
+        tabindex="0"
+        aria-label="Reaction test area. Start the test, wait for green, then tap quickly."
+      >
+        <div class="arena-icon" id="arenaIcon">⚡</div>
+        <h2 class="arena-title cyan" id="arenaTitle">READY?</h2>
+        <p class="arena-text" id="arenaText">
+          Press Start Test. Wait for the arena to turn green, then tap as fast as possible.
+        </p>
+        <span class="tap-hint" id="tapHint">REACTION ZONE</span>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>SESSION PROGRESS</span>
+          <span id="roundLabel">0 / 5 ROUNDS</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button class="btn primary" id="startBtn" type="button">▶ Start Test</button>
+        <button class="btn" id="resetBtn" type="button">↻ Reset</button>
+      </div>
+
+      <div class="status-message" id="statusMessage" aria-live="polite">
+        Ready to test your reflexes!
+      </div>
+    </div>
+
+    <aside class="panel">
+      <h2 class="panel-title">🏆 YOUR PERFORMANCE</h2>
+
+      <div class="info-box">
+        <h3>🎯 How to Play</h3>
+        <ul>
+          <li>Press Start Test.</li>
+          <li>Wait while the arena is red.</li>
+          <li>When it turns green, tap immediately.</li>
+          <li>Do not tap early, or the round is a false start.</li>
+          <li>Complete all five rounds to get your average.</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>📊 Reaction Guide</h3>
+        <div class="results-list">
+          <div class="result-row"><span>Under 200 ms</span><strong>Very Fast</strong></div>
+          <div class="result-row"><span>200–250 ms</span><strong>Fast</strong></div>
+          <div class="result-row"><span>250–350 ms</span><strong>Typical</strong></div>
+          <div class="result-row"><span>Over 350 ms</span><strong>Keep Practising</strong></div>
+        </div>
+        <p style="margin-top:10px">These are approximate game benchmarks, not a medical assessment.</p>
+      </div>
+
+      <div class="info-box">
+        <h3>💡 Pro Tip</h3>
+        <p>Stay relaxed and focus on the colour change. Screen refresh rate, device speed and input delay can affect your score.</p>
+      </div>
+
+      <div class="info-box">
+        <h3>🌟 PixelRush Challenge</h3>
+        <p>Complete five rounds and try to improve your personal best. Your best time is saved in this browser.</p>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<footer class="footer">
+  © 2026 <span>PixelRush</span> · Play smart. Play fair. Have fun.
+</footer>
+
+<script>
+(() => {
+  "use strict";
+
+  const arena = document.getElementById("arena");
+  const arenaIcon = document.getElementById("arenaIcon");
+  const arenaTitle = document.getElementById("arenaTitle");
+  const arenaText = document.getElementById("arenaText");
+  const tapHint = document.getElementById("tapHint");
+
+  const startBtn = document.getElementById("startBtn");
+  const resetBtn = document.getElementById("resetBtn");
+  const lastTimeDisplay = document.getElementById("lastTime");
+  const bestTimeDisplay = document.getElementById("bestTime");
+  const averageTimeDisplay = document.getElementById("averageTime");
+  const roundLabel = document.getElementById("roundLabel");
+  const progressBar = document.getElementById("progressBar");
+  const statusMessage = document.getElementById("statusMessage");
+
+  const ROUNDS = 5;
+  const BEST_KEY = "pixelrush_reaction_best_v1";
+
+  let state = "idle";
+  let results = [];
+  let round = 0;
+  let bestTime = readBestTime();
+  let startTimestamp = 0;
+  let timeoutId = null;
+  let roundToken = 0;
+
+  function readBestTime() {
+    try {
+      const value = Number(localStorage.getItem(BEST_KEY));
+      return Number.isFinite(value) && value > 0 ? value : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function saveBestTime() {
+    try {
+      localStorage.setItem(BEST_KEY, String(bestTime));
+    } catch {
+      // Game remains playable without browser storage.
+    }
+  }
+
+  function formatTime(value) {
+    return `${Math.round(value)} ms`;
+  }
+
+  function updateStats() {
+    const last = results.length ? results[results.length - 1] : null;
+
+    lastTimeDisplay.textContent = last === null ? "—" : formatTime(last);
+    bestTimeDisplay.textContent = bestTime === null ? "—" : formatTime(bestTime);
+
+    if (results.length) {
+      const average = results.reduce((sum, time) => sum + time, 0) / results.length;
+      averageTimeDisplay.textContent = formatTime(average);
+    } else {
+      averageTimeDisplay.textContent = "—";
+    }
+
+    roundLabel.textContent = `${round} / ${ROUNDS} ROUNDS`;
+    progressBar.style.width = `${(round / ROUNDS) * 100}%`;
+  }
+
+  function setArena(mode, icon, title, message, hint) {
+    arena.classList.remove("waiting", "ready", "result-state");
+    arena.classList.add(mode);
+
+    arenaIcon.textContent = icon;
+    arenaTitle.textContent = title;
+    arenaText.textContent = message;
+    tapHint.textContent = hint;
+
+    arenaTitle.className = "arena-title";
+
+    if (mode === "ready") arenaTitle.classList.add("green");
+    else if (mode === "waiting") arenaTitle.classList.add("pink");
+    else arenaTitle.classList.add("cyan");
+  }
+
+  function clearPendingTimer() {
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+  }
+
+  function startSession() {
+    clearPendingTimer();
+    roundToken++;
+
+    results = [];
+    round = 0;
+    updateStats();
+
+    startBtn.textContent = "Restart Session";
+    statusMessage.textContent = "Focus on the arena...";
+    beginRound();
+  }
+
+  function beginRound() {
+    clearPendingTimer();
+    roundToken++;
+    const token = roundToken;
+
+    round++;
+    updateStats();
+
+    state = "waiting";
+
+    setArena(
+      "waiting",
+      "🔴",
+      "WAIT FOR GREEN",
+      "Don't tap yet! React only when the arena turns green.",
+      `ROUND ${round} OF ${ROUNDS}`
+    );
+
+    statusMessage.textContent = "Wait for the signal...";
+    startBtn.disabled = true;
+
+    // Random delay helps prevent anticipation.
+    const delay = 1500 + Math.random() * 3500;
+
+    timeoutId = setTimeout(() => {
+      if (token !== roundToken || state !== "waiting") return;
+
+      timeoutId = null;
+      state = "ready";
+      startTimestamp = performance.now();
+
+      setArena(
+        "ready",
+        "🟢",
+        "TAP NOW!",
+        "The signal is green! Tap the arena as quickly as you can.",
+        "GO GO GO!"
+      );
+
+      statusMessage.textContent = "GREEN SIGNAL — react now!";
+    }, delay);
+  }
+
+  function handleArenaAction() {
+    if (state === "waiting") {
+      // Invalidate the pending signal to prevent stale callbacks.
+      clearPendingTimer();
+      roundToken++;
+      state = "false-start";
+
+      setArena(
+        "waiting",
+        "⚠️",
+        "FALSE START!",
+        "Too early! Wait for green next time. Restart the session to try again.",
+        "WAIT FOR GREEN"
+      );
+
+      statusMessage.textContent = "Early tap detected.";
+      startBtn.disabled = false;
+      startBtn.textContent = "Try Again";
+      return;
+    }
+
+    if (state === "ready") {
+      const elapsed = performance.now() - startTimestamp;
+      const reactionTime = Math.max(0, Math.round(elapsed));
+
+      state = "result";
+      results.push(reactionTime);
+
+      if (bestTime === null || reactionTime < bestTime) {
+        bestTime = reactionTime;
+        saveBestTime();
+        statusMessage.textContent = "New personal best! ⚡";
+      } else {
+        statusMessage.textContent = `Recorded: ${reactionTime} ms`;
+      }
+
+      updateStats();
+
+      setArena(
+        "result-state",
+        "⚡",
+        `${reactionTime} ms`,
+        getPerformanceMessage(reactionTime),
+        `ROUND ${round} COMPLETE`
+      );
+
+      if (round >= ROUNDS) {
+        finishSession();
+      } else {
+        startBtn.disabled = false;
+        startBtn.textContent = "Next Round →";
+      }
+    }
+  }
+
+  function getPerformanceMessage(time) {
+    if (time < 200) return "Incredible speed! That was a very fast reaction.";
+    if (time < 250) return "Excellent! You reacted quickly.";
+    if (time < 350) return "Nice work! Keep practising your timing.";
+    return "Round complete! Stay relaxed and try again.";
+  }
+
+  function finishSession() {
+    state = "finished";
+    startBtn.disabled = false;
+    startBtn.textContent = "Play Again";
+
+    const average = results.reduce((sum, time) => sum + time, 0) / results.length;
+    const fastest = Math.min(...results);
+
+    setArena(
+      "result-state",
+      "🏆",
+      "SESSION COMPLETE!",
+      `Average: ${Math.round(average)} ms · Best this session: ${fastest} ms`,
+      "ALL 5 ROUNDS COMPLETE"
+    );
+
+    statusMessage.textContent = "Great job! Your session is complete.";
+
+    // Optional PixelRush game-manager integration.
+    // A lower reaction time is better, so convert it into a higher-is-better score.
+    try {
+      if (window.PixelRushGameManager) {
+        const gameScore = Math.max(0, 1000 - Math.round(average));
+        window.PixelRushGameManager.recordScore("reaction-test", gameScore);
+      }
+    } catch (error) {
+      console.warn("Score integration unavailable.", error);
+    }
+  }
+
+  function resetSession() {
+    clearPendingTimer();
+    roundToken++;
+    state = "idle";
+    results = [];
+    round = 0;
+
+    startBtn.disabled = false;
+    startBtn.textContent = "▶ Start Test";
+
+    updateStats();
+
+    setArena(
+      "",
+      "⚡",
+      "READY?",
+      "Press Start Test. Wait for the arena to turn green, then tap as fast as possible.",
+      "REACTION ZONE"
+    );
+
+    statusMessage.textContent = "Ready to test your reflexes!";
+  }
+
+  startBtn.addEventListener("click", () => {
+    if (state === "waiting" || state === "ready") return;
+
+    if (state === "result" && round < ROUNDS) {
+      beginRound();
+      return;
+    }
+
+    // A false start requires a fresh session; completed sessions can be replayed.
+    startSession();
+  });
+
+  resetBtn.addEventListener("click", resetSession);
+
+  arena.addEventListener("click", handleArenaAction);
+
+  arena.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleArenaAction();
+    }
+  });
+
+  updateStats();
+})();
+</script>
+</body>
+</html>

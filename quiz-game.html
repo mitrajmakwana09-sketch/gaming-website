@@ -1,0 +1,648 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090b18">
+<title>PixelRush | GK Quiz Challenge</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --bg: #090b18;
+  --panel: #12162a;
+  --purple: #9b5cff;
+  --cyan: #34e7ff;
+  --text: #f4f5ff;
+  --muted: #a6acc9;
+  --green: #35e69b;
+  --red: #ff6685;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 15% 10%, #42247755, transparent 40%),
+    radial-gradient(ellipse at 90% 80%, #005b7650, transparent 38%),
+    var(--bg);
+  overflow-x: hidden;
+}
+
+button { font: inherit; }
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 20px clamp(16px, 5vw, 70px);
+  border-bottom: 1px solid #ffffff13;
+  background: #090b18bb;
+  backdrop-filter: blur(12px);
+}
+
+.logo {
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: white;
+  text-decoration: none;
+}
+
+.logo span { color: var(--cyan); }
+
+.back-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: .9rem;
+}
+.back-link:hover { color: var(--cyan); }
+
+.page {
+  width: min(850px, 92%);
+  margin: 42px auto 70px;
+}
+
+.heading { text-align: center; margin-bottom: 28px; }
+.eyebrow {
+  display: inline-block;
+  padding: 8px 13px;
+  border: 1px solid #9b5cff70;
+  border-radius: 50px;
+  background: #9b5cff18;
+  color: #d7bdff;
+  font-size: .76rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+h1 {
+  margin-top: 17px;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  line-height: 1.12;
+  letter-spacing: -1.5px;
+}
+
+h1 span {
+  background: linear-gradient(90deg, var(--cyan), #b48aff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.heading p {
+  margin: 13px auto 0;
+  max-width: 520px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.quiz-card {
+  padding: clamp(19px, 4vw, 35px);
+  border: 1px solid #ffffff19;
+  border-radius: 25px;
+  background: linear-gradient(145deg, #171b33f5, #0e1123f5);
+  box-shadow: 0 25px 80px #0007, 0 0 35px #8c50ff0b;
+  animation: rise .65s ease both;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.stat {
+  padding: 13px 8px;
+  text-align: center;
+  background: #ffffff07;
+  border: 1px solid #ffffff12;
+  border-radius: 14px;
+}
+
+.stat small {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .7px;
+}
+
+.stat strong { font-size: 1.15rem; }
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: .82rem;
+  margin-bottom: 10px;
+}
+
+.progress-track {
+  height: 7px;
+  border-radius: 30px;
+  background: #ffffff12;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+.progress-fill {
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--purple), var(--cyan));
+  border-radius: inherit;
+  transition: width .35s ease;
+  box-shadow: 0 0 15px #34e7ff80;
+}
+
+.question-tag {
+  color: var(--cyan);
+  font-size: .77rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
+}
+
+#question {
+  font-size: clamp(1.2rem, 3vw, 1.65rem);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 65px;
+  padding: 13px 15px;
+  text-align: left;
+  color: var(--text);
+  background: #ffffff07;
+  border: 1px solid #ffffff1c;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: .22s ease;
+}
+
+.option:hover:not(:disabled) {
+  border-color: var(--purple);
+  background: #9b5cff17;
+  transform: translateY(-2px);
+}
+
+.option:focus-visible, button:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+
+.option:disabled { cursor: default; }
+
+.option-letter {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #ffffff0c;
+  color: #c4b3ff;
+  font-weight: 800;
+}
+
+.option.correct {
+  border-color: var(--green);
+  background: #35e69b15;
+}
+.option.correct .option-letter { color: #071b13; background: var(--green); }
+
+.option.wrong {
+  border-color: var(--red);
+  background: #ff668515;
+}
+.option.wrong .option-letter { color: white; background: var(--red); }
+
+.feedback {
+  display: none;
+  padding: 15px 16px;
+  margin-top: 20px;
+  border-radius: 13px;
+  line-height: 1.6;
+  font-size: .91rem;
+}
+.feedback.show { display: block; animation: rise .3s ease; }
+.feedback.good { background: #35e69b12; border: 1px solid #35e69b55; }
+.feedback.bad { background: #ff668512; border: 1px solid #ff668555; }
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 23px;
+}
+
+.muted-note { color: var(--muted); font-size: .8rem; }
+
+.primary-btn {
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 22px;
+  font-weight: 800;
+  color: #090b18;
+  background: linear-gradient(100deg, var(--cyan), #a98aff);
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+}
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px #7f5aff35;
+}
+.primary-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+.result {
+  display: none;
+  text-align: center;
+  padding: 12px 0 5px;
+  animation: rise .6s ease;
+}
+.result.show { display: block; }
+.result-emoji { font-size: 4rem; margin-bottom: 14px; }
+.result h2 { font-size: clamp(1.8rem, 5vw, 2.7rem); margin-bottom: 12px; }
+.result p { color: var(--muted); line-height: 1.8; margin-bottom: 22px; }
+.result-score {
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: var(--cyan);
+  margin: 17px 0;
+}
+.result-message {
+  max-width: 480px;
+  margin: 0 auto 25px;
+}
+.result-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.secondary-btn {
+  padding: 13px 20px;
+  border: 1px solid #ffffff28;
+  border-radius: 12px;
+  background: #ffffff08;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+}
+.secondary-btn:hover { border-color: var(--cyan); }
+
+.footer {
+  text-align: center;
+  color: #7e84a4;
+  font-size: .8rem;
+  padding: 0 15px 28px;
+}
+
+@media (max-width: 580px) {
+  .page { margin-top: 28px; }
+  .options { grid-template-columns: 1fr; gap: 10px; }
+  .option { min-height: 57px; }
+  .stats { gap: 7px; }
+  .stat small { font-size: .64rem; }
+  .stat strong { font-size: 1rem; }
+  .controls { align-items: stretch; flex-direction: column; }
+  .primary-btn { width: 100%; }
+  .muted-note { text-align: center; }
+  .topbar { padding: 17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <a class="logo" href="../index.html">PIXEL<span>RUSH</span></a>
+  <a class="back-link" href="../games.html">← All Games</a>
+</header>
+
+<main class="page">
+  <section class="heading">
+    <span class="eyebrow">🧠 KNOWLEDGE ARENA</span>
+    <h1>GK Quiz <span>Challenge</span></h1>
+    <p>10 questions. 4 options. One champion. Show what you know!</p>
+  </section>
+
+  <section class="quiz-card" id="quizCard">
+    <div id="quizScreen">
+      <div class="stats">
+        <div class="stat"><small>Question</small><strong id="questionStat">1 / 10</strong></div>
+        <div class="stat"><small>Score</small><strong id="scoreStat">0</strong></div>
+        <div class="stat"><small>Time Left</small><strong id="timerStat">20s</strong></div>
+      </div>
+
+      <div class="progress-info">
+        <span>YOUR PROGRESS</span>
+        <span id="progressText">0% completed</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <div class="question-tag">Question <span id="questionNumber">01</span></div>
+      <h2 id="question">Loading question...</h2>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+
+      <div class="controls">
+        <span class="muted-note">⚡ Answer before the timer runs out</span>
+        <button class="primary-btn" id="nextBtn" disabled>Next Question →</button>
+      </div>
+    </div>
+
+    <div class="result" id="resultScreen" aria-live="polite">
+      <div class="result-emoji" id="resultEmoji">🏆</div>
+      <h2 id="resultTitle">Congratulations! You Won!</h2>
+      <div class="result-score" id="finalScore">10 / 10</div>
+      <p id="resultMessage" class="result-message"></p>
+      <div class="result-actions">
+        <button class="primary-btn" id="restartBtn">↻ Play Again</button>
+        <a class="secondary-btn" href="../games.html">Back to Games</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">PIXELRUSH © 2026 · Learn. Play. Level Up.</footer>
+
+<script>
+"use strict";
+
+const questions = [
+  {
+    q: "What is the capital of India?",
+    options: ["Mumbai", "New Delhi", "Jaipur", "Kolkata"],
+    answer: 1,
+    explanation: "New Delhi is the capital of India."
+  },
+  {
+    q: "Which planet is known as the Red Planet?",
+    options: ["Venus", "Jupiter", "Mars", "Mercury"],
+    answer: 2,
+    explanation: "Mars appears reddish because of iron oxide on its surface."
+  },
+  {
+    q: "What is the national animal of India?",
+    options: ["Asiatic Lion", "Bengal Tiger", "Elephant", "Leopard"],
+    answer: 1,
+    explanation: "The Bengal Tiger is India's national animal."
+  },
+  {
+    q: "How many sides does a hexagon have?",
+    options: ["Five", "Seven", "Six", "Eight"],
+    answer: 2,
+    explanation: "A hexagon is a polygon with six sides."
+  },
+  {
+    q: "Which is the largest ocean on Earth?",
+    options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+    answer: 3,
+    explanation: "The Pacific Ocean is the largest and deepest ocean on Earth."
+  },
+  {
+    q: "Who wrote India's national anthem, Jana Gana Mana?",
+    options: ["Rabindranath Tagore", "Bankim Chandra Chatterjee", "Sarojini Naidu", "Mahatma Gandhi"],
+    answer: 0,
+    explanation: "Rabindranath Tagore wrote Jana Gana Mana."
+  },
+  {
+    q: "Which gas do plants absorb during photosynthesis?",
+    options: ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"],
+    answer: 2,
+    explanation: "Plants absorb carbon dioxide and use light energy during photosynthesis."
+  },
+  {
+    q: "What is the currency of Japan?",
+    options: ["Won", "Yuan", "Dollar", "Yen"],
+    answer: 3,
+    explanation: "The official currency of Japan is the Japanese yen."
+  },
+  {
+    q: "Which is the fastest land animal?",
+    options: ["Cheetah", "Lion", "Horse", "Leopard"],
+    answer: 0,
+    explanation: "The cheetah is the fastest land animal over short distances."
+  },
+  {
+    q: "How many players from one team are on the field in a standard football (soccer) match?",
+    options: ["Nine", "Eleven", "Ten", "Twelve"],
+    answer: 1,
+    explanation: "A standard football team has 11 players on the field, including the goalkeeper."
+  }
+];
+
+const $ = id => document.getElementById(id);
+
+let current = 0;
+let score = 0;
+let timeLeft = 20;
+let timer = null;
+let locked = false;
+let finished = false;
+
+function startQuiz() {
+  clearInterval(timer);
+  current = 0;
+  score = 0;
+  timeLeft = 20;
+  locked = false;
+  finished = false;
+
+  $("quizScreen").style.display = "block";
+  $("resultScreen").classList.remove("show");
+  $("scoreStat").textContent = "0";
+  showQuestion();
+}
+
+function showQuestion() {
+  clearInterval(timer);
+  locked = false;
+  timeLeft = 20;
+
+  const item = questions[current];
+  $("questionStat").textContent = `${current + 1} / ${questions.length}`;
+  $("questionNumber").textContent = String(current + 1).padStart(2, "0");
+  $("question").textContent = item.q;
+  $("timerStat").textContent = `${timeLeft}s`;
+  $("progressText").textContent =
+    `${Math.round((current / questions.length) * 100)}% completed`;
+  $("progressFill").style.width =
+    `${(current / questions.length) * 100}%`;
+
+  $("feedback").className = "feedback";
+  $("feedback").textContent = "";
+  $("nextBtn").disabled = true;
+  $("nextBtn").textContent =
+    current === questions.length - 1 ? "See My Result 🏆" : "Next Question →";
+
+  const options = $("options");
+  options.replaceChildren();
+
+  item.options.forEach((label, index) => {
+    const button = document.createElement("button");
+    button.className = "option";
+
+    const letter = document.createElement("span");
+    letter.className = "option-letter";
+    letter.textContent = String.fromCharCode(65 + index);
+
+    const text = document.createElement("span");
+    text.textContent = label;
+
+    button.append(letter, text);
+    button.addEventListener("click", () => selectAnswer(index));
+    options.appendChild(button);
+  });
+
+  timer = setInterval(() => {
+    timeLeft--;
+    $("timerStat").textContent = `${timeLeft}s`;
+
+    if (timeLeft <= 5) {
+      $("timerStat").style.color = "var(--red)";
+    } else {
+      $("timerStat").style.color = "var(--text)";
+    }
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      if (!locked) selectAnswer(-1);
+    }
+  }, 1000);
+}
+
+function selectAnswer(selected) {
+  if (locked || finished) return;
+  locked = true;
+  clearInterval(timer);
+
+  const item = questions[current];
+  const buttons = [...$("options").querySelectorAll(".option")];
+  buttons.forEach(button => button.disabled = true);
+
+  const isCorrect = selected === item.answer;
+
+  if (isCorrect) {
+    score++;
+    $("scoreStat").textContent = score;
+  }
+
+  if (selected >= 0) {
+    buttons[selected].classList.add(isCorrect ? "correct" : "wrong");
+  }
+  buttons[item.answer].classList.add("correct");
+
+  const feedback = $("feedback");
+  feedback.className = `feedback show ${isCorrect ? "good" : "bad"}`;
+
+  if (selected === -1) {
+    feedback.textContent = `⏰ Time is up! Correct answer: ${item.options[item.answer]}. ${item.explanation}`;
+  } else if (isCorrect) {
+    feedback.textContent = `✅ Correct! ${item.explanation}`;
+  } else {
+    feedback.textContent = `❌ Not quite! Correct answer: ${item.options[item.answer]}. ${item.explanation}`;
+  }
+
+  $("progressText").textContent =
+    `${Math.round(((current + 1) / questions.length) * 100)}% completed`;
+  $("progressFill").style.width =
+    `${((current + 1) / questions.length) * 100}%`;
+
+  $("nextBtn").disabled = false;
+}
+
+function nextQuestion() {
+  if (!locked || finished) return;
+
+  current++;
+  if (current < questions.length) {
+    showQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+function finishQuiz() {
+  finished = true;
+  clearInterval(timer);
+
+  $("quizScreen").style.display = "none";
+  $("resultScreen").classList.add("show");
+  $("finalScore").textContent = `${score} / ${questions.length}`;
+
+  // Save this attempt on the current browser/device.
+  try {
+    const previous = JSON.parse(localStorage.getItem("pixelrush_gk_quiz_best") || "0");
+    const best = Math.max(Number(previous) || 0, score);
+    localStorage.setItem("pixelrush_gk_quiz_best", String(best));
+  } catch (error) {
+    console.warn("Could not save the quiz best score.", error);
+  }
+
+  // Connect with PixelRush game manager if it exists.
+  if (window.PixelRushGameManager &&
+      typeof window.PixelRushGameManager.recordScore === "function") {
+    try {
+      window.PixelRushGameManager.recordScore("gk-quiz", score);
+    } catch (error) {
+      console.warn("Game score integration unavailable.", error);
+    }
+  }
+
+  if (score === questions.length) {
+    $("resultEmoji").textContent = "🏆";
+    $("resultTitle").textContent = "Congratulations! You Won!";
+    $("resultTitle").style.color = "var(--green)";
+    $("resultMessage").textContent =
+      "Amazing! You answered all 10 questions correctly. You are a GK Quiz Champion! Keep learning and keep winning!";
+  } else {
+    $("resultEmoji").textContent = score >= 6 ? "🌟" : "💪";
+    $("resultTitle").textContent = "Keep Trying! Better Luck Next Time!";
+    $("resultTitle").style.color = "var(--cyan)";
+    $("resultMessage").textContent =
+      `You got ${score} out of ${questions.length} correct. Don't give up! Review the answers, practise your GK, and try again to win the quiz.`;
+  }
+}
+
+$("nextBtn").addEventListener("click", nextQuestion);
+$("restartBtn").addEventListener("click", startQuiz);
+
+startQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "games": [
+    {
+      "id": "gk-quiz",
+      "name": "GK Quiz Challenge",
+      "description": "Test your general knowledge with fun questions!",
+      "category": "quiz",
+      "difficulty": "medium",
+      "players": "Single Player",
+      "rating": 4.9,
+      "thumbnail": "https://images.unsplash.com/photo-1453738773917-9c3eff1db985?auto=format&fit=crop&w=800&q=80",
+      "url": "games/gk-quiz.html",
+      "icon": "🧠",
+      "featured": true,
+      "status": "active"
+    }
+  ]
+}

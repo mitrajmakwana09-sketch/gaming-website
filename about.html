@@ -1,0 +1,819 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b16">
+<meta name="description" content="Learn about PixelRush, your home for fun browser games, challenges, and gaming achievements.">
+<title>About Us | PixelRush</title>
+
+<style>
+:root {
+    --bg: #080b16;
+    --card: #11172a;
+    --purple: #a855f7;
+    --cyan: #22d3ee;
+    --text: #f4f5ff;
+    --muted: #a5acc5;
+    --border: rgba(255,255,255,.09);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(ellipse at 15% 5%, rgba(168,85,247,.12), transparent 38%),
+        radial-gradient(ellipse at 90% 35%, rgba(34,211,238,.08), transparent 35%),
+        var(--bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button, a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* NAVBAR */
+.navbar {
+    width: 100%;
+    min-height: 76px;
+    padding: 16px 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(8,11,22,.88);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(18px);
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    white-space: nowrap;
+}
+
+.logo span {
+    color: var(--cyan);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+}
+
+.nav-links a {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 600;
+    transition: .25s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--cyan);
+}
+
+.nav-btn {
+    padding: 11px 19px;
+    border-radius: 10px;
+    color: #080b16 !important;
+    background: linear-gradient(100deg, var(--cyan), #67e8f9);
+    font-weight: 800 !important;
+}
+
+.menu-toggle {
+    display: none;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 9px;
+    padding: 8px 12px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+/* HERO */
+.hero {
+    min-height: 440px;
+    padding: 95px 20px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before,
+.hero::after {
+    content: "";
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: .22;
+    pointer-events: none;
+}
+
+.hero::before {
+    background: var(--purple);
+    top: 10px;
+    left: -120px;
+}
+
+.hero::after {
+    background: var(--cyan);
+    right: -100px;
+    bottom: 0;
+}
+
+.hero-content {
+    max-width: 850px;
+    position: relative;
+    z-index: 1;
+    animation: riseIn .8s ease both;
+}
+
+.eyebrow {
+    display: inline-block;
+    color: var(--cyan);
+    border: 1px solid rgba(34,211,238,.3);
+    background: rgba(34,211,238,.07);
+    border-radius: 30px;
+    padding: 9px 16px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+.hero h1 {
+    font-size: clamp(38px, 7vw, 76px);
+    font-weight: 950;
+    line-height: 1.08;
+    letter-spacing: -2px;
+    margin-bottom: 22px;
+}
+
+.gradient-text {
+    background: linear-gradient(100deg, var(--cyan), #a78bfa, #f0abfc);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+
+.hero p {
+    color: var(--muted);
+    max-width: 650px;
+    margin: auto;
+    font-size: 17px;
+    line-height: 1.8;
+}
+
+.hero-actions {
+    margin-top: 32px;
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 23px;
+    border-radius: 11px;
+    font-size: 14px;
+    font-weight: 800;
+    transition: transform .25s, box-shadow .25s;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+}
+
+.btn-primary {
+    background: linear-gradient(100deg, var(--cyan), #67e8f9);
+    color: #07101a;
+    box-shadow: 0 0 25px rgba(34,211,238,.15);
+}
+
+.btn-secondary {
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.035);
+}
+
+/* GENERAL SECTIONS */
+.section {
+    width: min(1120px, 86%);
+    margin: 0 auto;
+    padding: 65px 0;
+}
+
+.section-heading {
+    text-align: center;
+    margin-bottom: 38px;
+}
+
+.section-heading .small-title {
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 12px;
+    font-weight: 900;
+    margin-bottom: 13px;
+}
+
+.section-heading h2 {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 900;
+    margin-bottom: 14px;
+}
+
+.section-heading p {
+    color: var(--muted);
+    max-width: 620px;
+    margin: auto;
+    line-height: 1.8;
+}
+
+/* STORY */
+.story-grid {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    align-items: center;
+    gap: 48px;
+}
+
+.story-text h2 {
+    font-size: clamp(27px, 4vw, 39px);
+    line-height: 1.25;
+    margin-bottom: 22px;
+}
+
+.story-text p {
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 16px;
+    font-size: 15px;
+}
+
+.story-visual {
+    min-height: 310px;
+    display: grid;
+    place-items: center;
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at center, rgba(168,85,247,.19), transparent 55%),
+        linear-gradient(145deg, #151b32, #0d1120);
+    overflow: hidden;
+}
+
+.story-visual::before {
+    content: "";
+    position: absolute;
+    inset: 20px;
+    border: 1px dashed rgba(34,211,238,.25);
+    border-radius: 18px;
+}
+
+.game-symbol {
+    font-size: 100px;
+    filter: drop-shadow(0 0 25px rgba(34,211,238,.4));
+    animation: float 3s ease-in-out infinite;
+}
+
+/* STATS */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 17px;
+}
+
+.stat-card {
+    padding: 28px 15px;
+    text-align: center;
+    background: linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.015));
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    transition: .3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(34,211,238,.45);
+}
+
+.stat-icon {
+    font-size: 27px;
+    margin-bottom: 13px;
+}
+
+.stat-number {
+    color: var(--cyan);
+    font-size: 32px;
+    font-weight: 950;
+    margin-bottom: 8px;
+}
+
+.stat-card p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* FEATURES */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.feature-card {
+    background: linear-gradient(145deg, rgba(17,23,42,.95), rgba(12,16,31,.95));
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 27px;
+    transition: .3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(168,85,247,.6);
+    box-shadow: 0 12px 35px rgba(0,0,0,.18);
+}
+
+.feature-icon {
+    width: 54px;
+    height: 54px;
+    display: grid;
+    place-items: center;
+    border-radius: 15px;
+    font-size: 25px;
+    background: rgba(168,85,247,.12);
+    border: 1px solid rgba(168,85,247,.22);
+    margin-bottom: 22px;
+}
+
+.feature-card h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.feature-card p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* MISSION */
+.mission-box {
+    text-align: center;
+    padding: 55px 30px;
+    border: 1px solid rgba(34,211,238,.2);
+    border-radius: 24px;
+    background:
+        radial-gradient(ellipse at top, rgba(34,211,238,.08), transparent 60%),
+        rgba(255,255,255,.02);
+}
+
+.mission-box h2 {
+    font-size: clamp(27px, 4vw, 40px);
+    margin-bottom: 18px;
+}
+
+.mission-box p {
+    color: var(--muted);
+    max-width: 720px;
+    margin: 0 auto 27px;
+    line-height: 1.9;
+}
+
+/* FOOTER */
+.footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.footer strong {
+    color: var(--text);
+}
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.footer-links a:hover {
+    color: var(--cyan);
+}
+
+/* SCROLL REVEAL */
+.reveal {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity .7s ease, transform .7s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@keyframes riseIn {
+    from { opacity: 0; transform: translateY(22px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-13px) rotate(4deg); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 850px) {
+    .nav-links {
+        gap: 15px;
+    }
+
+    .nav-links a {
+        font-size: 12px;
+    }
+
+    .story-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .story-visual {
+        min-height: 240px;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 620px) {
+    .navbar {
+        padding: 15px 5%;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        padding: 20px 5%;
+        background: #0c1020;
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .nav-links a {
+        padding: 13px 5px;
+        font-size: 14px;
+    }
+
+    .nav-btn {
+        text-align: center;
+        margin-top: 8px;
+    }
+
+    .hero {
+        min-height: 400px;
+        padding: 75px 7% 60px;
+    }
+
+    .hero h1 {
+        letter-spacing: -1px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    .section {
+        width: 90%;
+        padding: 45px 0;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-card {
+        padding: 23px;
+    }
+
+    .footer {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .mission-box {
+        padding: 38px 20px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+    <a href="index.html" class="logo">PIXEL<span>RUSH</span></a>
+
+    <button class="menu-toggle" id="menuToggle"
+            aria-label="Open navigation menu"
+            aria-expanded="false">☰</button>
+
+    <nav class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="games.html">Games</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="about.html" class="active">About</a>
+        <a href="login.html" class="nav-btn">Play Now ↗</a>
+    </nav>
+</header>
+
+<main>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="eyebrow">🎮 Welcome to PixelRush</span>
+
+            <h1>
+                Gaming is more fun<br>
+                <span class="gradient-text">when you play.</span>
+            </h1>
+
+            <p>
+                Your destination for browser gaming, friendly challenges,
+                exciting experiences and unforgettable moments.
+                Jump in, explore games and make every play count.
+            </p>
+
+            <div class="hero-actions">
+                <a href="games.html" class="btn btn-primary">Explore Games →</a>
+                <a href="#our-story" class="btn btn-secondary">Discover Our Story</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- OUR STORY -->
+    <section class="section reveal" id="our-story">
+        <div class="story-grid">
+            <div class="story-text">
+                <span class="eyebrow">Our Story</span>
+                <h2>A gaming world built for <span class="gradient-text">everyone.</span></h2>
+
+                <p>
+                    PixelRush is designed as a fun, modern destination
+                    for people who enjoy games, quick challenges and
+                    discovering something new.
+                </p>
+
+                <p>
+                    Our goal is to make exploring games simple, keep
+                    the experience engaging and create a place where
+                    players can enjoy casual gaming at their own pace.
+                </p>
+
+                <p>
+                    Whether you have a few minutes or want to beat your
+                    best score, there is always another challenge to try.
+                </p>
+            </div>
+
+            <div class="story-visual">
+                <div class="game-symbol" aria-label="Game controller">🎮</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="section reveal">
+        <div class="section-heading">
+            <p class="small-title">PixelRush at a glance</p>
+            <h2>Made for <span class="gradient-text">game lovers</span></h2>
+            <p>Our focus is on accessible games, smooth navigation and enjoyable challenges.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🕹️</div>
+                <div class="stat-number">Fun</div>
+                <p>Gaming experiences</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-number">Fast</div>
+                <p>Easy game discovery</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📱</div>
+                <div class="stat-number">Any</div>
+                <p>Modern screen sizes</p>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-number">Play</div>
+                <p>Challenge yourself</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section reveal">
+        <div class="section-heading">
+            <p class="small-title">Why PixelRush?</p>
+            <h2>Everything starts with <span class="gradient-text">fun.</span></h2>
+            <p>Designed to make your gaming experience clear, comfortable and exciting.</p>
+        </div>
+
+        <div class="features-grid">
+            <article class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Discover Games</h3>
+                <p>Browse available games and find a new challenge that matches your mood.</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Simple Experience</h3>
+                <p>Enjoy a clean interface designed to help you navigate between pages easily.</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Responsive Design</h3>
+                <p>Use the website on a laptop, desktop, tablet or mobile screen.</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Personal Challenges</h3>
+                <p>Try to improve your scores and challenge yourself to do better each time.</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon">✨</div>
+                <h3>Neon Style</h3>
+                <p>Explore a dark gaming interface with glowing accents and smooth animations.</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Browser Gaming</h3>
+                <p>Play compatible games directly in your browser without a separate game launcher.</p>
+            </article>
+        </div>
+    </section>
+
+    <!-- MISSION -->
+    <section class="section reveal">
+        <div class="mission-box">
+            <span class="eyebrow">Our Mission</span>
+            <h2>Less searching. <span class="gradient-text">More playing.</span></h2>
+            <p>
+                We want PixelRush to be a welcoming place to discover games,
+                enjoy friendly challenges and make the most of your free time.
+                Keep exploring, keep learning and most importantly, have fun.
+            </p>
+            <a href="games.html" class="btn btn-primary">Start Exploring →</a>
+        </div>
+    </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <p>© <span id="year"></span> <strong>PixelRush</strong>. Made for game lovers.</p>
+
+    <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="games.html">Games</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="profile.html">Profile</a>
+        <a href="login.html">Login</a>
+    </div>
+</footer>
+
+<script>
+/* Mobile navigation */
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.getElementById("navLinks");
+
+menuToggle.addEventListener("click", () => {
+    const isOpen = navLinks.classList.toggle("open");
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+    menuToggle.setAttribute(
+        "aria-label",
+        isOpen ? "Close navigation menu" : "Open navigation menu"
+    );
+    menuToggle.textContent = isOpen ? "✕" : "☰";
+});
+
+/* Close mobile menu after selecting a link */
+navLinks.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+        navLinks.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Open navigation menu");
+        menuToggle.textContent = "☰";
+    });
+});
+
+/* Current year */
+document.getElementById("year").textContent = new Date().getFullYear();
+
+/* Reveal sections while scrolling */
+const revealElements = document.querySelectorAll(".reveal");
+
+if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.12
+    });
+
+    revealElements.forEach(element => observer.observe(element));
+} else {
+    revealElements.forEach(element => element.classList.add("visible"));
+}
+</script>
+
+</body>
+</html>

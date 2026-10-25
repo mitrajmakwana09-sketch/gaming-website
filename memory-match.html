@@ -1,0 +1,861 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b18">
+<title>Memory Match | PixelRush</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #080b18;
+  --panel: #11172b;
+  --cyan: #00f5ff;
+  --green: #9cff57;
+  --pink: #ff3cac;
+  --purple: #a879ff;
+  --muted: #9aa5c5;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  color: #f3f6ff;
+  font-family: 'Poppins', sans-serif;
+  background:
+    radial-gradient(ellipse at 10% 10%, #16234b, transparent 38%),
+    radial-gradient(ellipse at 90% 85%, #341448, transparent 36%),
+    var(--bg);
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(#ffffff08 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff08 1px, transparent 1px);
+  background-size: 38px 38px;
+}
+
+.navbar {
+  min-height: 76px;
+  padding: 15px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid #ffffff12;
+  background: #080b18dd;
+  backdrop-filter: blur(15px);
+}
+
+.logo {
+  color: var(--cyan);
+  font: 800 23px 'Orbitron', sans-serif;
+  text-decoration: none;
+  letter-spacing: 1px;
+  text-shadow: 0 0 18px #00f5ff70;
+}
+
+.logo span { color: white; }
+
+.back-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color .25s;
+}
+
+.back-link:hover { color: var(--cyan); }
+
+.page {
+  width: min(100% - 30px, 1080px);
+  margin: 38px auto;
+  animation: pageEnter .7s ease both;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 7px 15px;
+  border: 1px solid #a879ff50;
+  border-radius: 30px;
+  color: #c5a7ff;
+  background: #a879ff0c;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+h1 {
+  margin: 16px 0 9px;
+  font: 800 clamp(29px, 5vw, 47px) 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+}
+
+h1 span {
+  color: var(--purple);
+  text-shadow: 0 0 25px #a879ff50;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(250px, .75fr);
+  gap: 23px;
+  align-items: start;
+}
+
+.panel {
+  position: relative;
+  overflow: hidden;
+  padding: 23px;
+  border: 1px solid #ffffff15;
+  border-radius: 23px;
+  background: linear-gradient(145deg, #151c33f2, #0d1225f7);
+  box-shadow: 0 20px 65px #0005;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  right: -80px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: var(--purple);
+  filter: blur(90px);
+  opacity: .13;
+  pointer-events: none;
+}
+
+.panel-title {
+  margin-bottom: 17px;
+  font: 600 13px 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.difficulty {
+  display: flex;
+  gap: 6px;
+  padding: 5px;
+  border-radius: 12px;
+  background: #080b18;
+}
+
+.level-btn {
+  padding: 9px 12px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  color: var(--muted);
+  background: transparent;
+  font: 500 11px 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.level-btn.active {
+  color: var(--cyan);
+  border-color: #00f5ff40;
+  background: #00f5ff12;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.stat {
+  padding: 12px 4px;
+  text-align: center;
+  border: 1px solid #ffffff10;
+  border-radius: 13px;
+  background: #ffffff06;
+}
+
+.stat-label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: .7px;
+}
+
+.stat-value {
+  font: 700 clamp(14px, 2.5vw, 20px) 'Orbitron', sans-serif;
+}
+
+#moves { color: var(--cyan); }
+#timer { color: var(--pink); }
+#matches { color: var(--green); }
+#best { color: var(--purple); }
+
+.game-status {
+  min-height: 21px;
+  margin-bottom: 13px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  perspective: 1000px;
+}
+
+.card {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  cursor: pointer;
+  perspective: 800px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.card-inner {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: inherit;
+  transform-style: preserve-3d;
+  transition: transform .45s cubic-bezier(.2, .7, .3, 1);
+}
+
+.card.flipped .card-inner,
+.card.matched .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ffffff18;
+  border-radius: inherit;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+
+.card-back {
+  color: var(--cyan);
+  background: linear-gradient(145deg, #1c2948, #11182e);
+  font: 800 clamp(18px, 4vw, 30px) 'Orbitron', sans-serif;
+  text-shadow: 0 0 15px #00f5ff45;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.card-back::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid #00f5ff25;
+  border-radius: 9px;
+  pointer-events: none;
+}
+
+.card:not(.flipped):not(.matched):hover .card-back {
+  border-color: #00f5ff90;
+  box-shadow: 0 0 20px #00f5ff13;
+}
+
+.card-front {
+  transform: rotateY(180deg);
+  background: linear-gradient(145deg, #172a3e, #11172b);
+  border-color: #00f5ff65;
+  font-size: clamp(23px, 5vw, 42px);
+}
+
+.card.matched .card-front {
+  border-color: #9cff5790;
+  background: linear-gradient(145deg, #193d32, #102820);
+  box-shadow: inset 0 0 22px #9cff5712, 0 0 15px #9cff5710;
+  animation: matchGlow .65s ease;
+}
+
+.card:disabled {
+  cursor: default;
+}
+
+.card:focus-visible,
+.btn:focus-visible,
+.level-btn:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 3px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 19px;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px 10px;
+  border: 1px solid #ffffff20;
+  border-radius: 12px;
+  color: white;
+  background: #ffffff08;
+  font: 600 12px 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--cyan);
+}
+
+.btn.primary {
+  color: #080b18;
+  background: linear-gradient(110deg, #00f5ff, #a879ff);
+  border: none;
+  box-shadow: 0 5px 20px #00f5ff20;
+}
+
+.btn.primary:hover {
+  box-shadow: 0 7px 25px #00f5ff40;
+}
+
+.info-box {
+  padding: 16px;
+  margin-top: 16px;
+  border: 1px solid #a879ff22;
+  border-radius: 15px;
+  background: #a879ff08;
+}
+
+.info-box h3 {
+  margin-bottom: 9px;
+  color: #c5a7ff;
+  font-size: 13px;
+}
+
+.info-box p,
+.info-box li {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.info-box ul {
+  padding-left: 17px;
+}
+
+.result-banner {
+  display: none;
+  padding: 16px;
+  margin-top: 17px;
+  text-align: center;
+  border: 1px solid #9cff5750;
+  border-radius: 14px;
+  background: #9cff570a;
+}
+
+.result-banner.show {
+  display: block;
+  animation: pageEnter .45s ease both;
+}
+
+.result-banner h3 {
+  color: var(--green);
+  font: 700 17px 'Orbitron', sans-serif;
+}
+
+.result-banner p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.footer {
+  padding: 26px 15px;
+  color: #77819e;
+  font-size: 11px;
+  text-align: center;
+}
+
+.footer span { color: var(--cyan); }
+
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes matchGlow {
+  0% { transform: scale(.93); }
+  60% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+@media (max-width: 760px) {
+  .page { margin: 25px auto; }
+  .layout { grid-template-columns: 1fr; }
+  .panel { padding: 17px; }
+  .game-panel { width: 100%; max-width: 600px; margin: auto; }
+}
+
+@media (max-width: 430px) {
+  .navbar { padding: 14px 5%; }
+  .logo { font-size: 18px; }
+  .back-link { font-size: 11px; }
+  .panel { padding: 13px; }
+  .board { gap: 7px; }
+  .card { border-radius: 10px; }
+  .card-face { border-radius: 10px; }
+  .card-back::before { inset: 4px; border-radius: 6px; }
+  .stats { gap: 5px; }
+  .stat-label { font-size: 8px; }
+  .toolbar { align-items: flex-start; flex-direction: column; }
+  .level-btn { padding: 8px 10px; }
+  .buttons { gap: 7px; }
+  .btn { font-size: 11px; padding: 11px 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<header class="navbar">
+  <a href="../index.html" class="logo">PIXEL<span>RUSH</span></a>
+  <a href="../games.html" class="back-link">← Back to Games</a>
+</header>
+
+<main class="page">
+  <section class="heading">
+    <span class="eyebrow">✦ BRAIN TRAINING</span>
+    <h1>MEMORY <span>MATCH</span></h1>
+    <p class="subtitle">Flip the cards. Find the pairs. Train your brain!</p>
+  </section>
+
+  <section class="layout">
+    <div class="panel game-panel">
+      <h2 class="panel-title">🧠 MEMORY ARENA</h2>
+
+      <div class="toolbar">
+        <div class="difficulty" aria-label="Choose difficulty">
+          <button class="level-btn active" data-level="easy" type="button">Easy</button>
+          <button class="level-btn" data-level="medium" type="button">Medium</button>
+          <button class="level-btn" data-level="hard" type="button">Hard</button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-label">MOVES</span>
+          <span class="stat-value" id="moves">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">TIME</span>
+          <span class="stat-value" id="timer">00:00</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">MATCHES</span>
+          <span class="stat-value" id="matches">0/6</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">BEST SCORE</span>
+          <span class="stat-value" id="best">—</span>
+        </div>
+      </div>
+
+      <p class="game-status" id="gameStatus" aria-live="polite">
+        Find all matching pairs to win!
+      </p>
+
+      <div class="board" id="board" aria-label="Memory matching cards"></div>
+
+      <div class="result-banner" id="resultBanner" aria-live="polite">
+        <h3>🏆 YOU DID IT!</h3>
+        <p id="resultText"></p>
+      </div>
+
+      <div class="buttons">
+        <button class="btn primary" id="newGameBtn" type="button">↻ New Game</button>
+        <button class="btn" id="resetBestBtn" type="button">Reset Best</button>
+      </div>
+    </div>
+
+    <aside class="panel">
+      <h2 class="panel-title">🎯 GAME GUIDE</h2>
+
+      <div class="info-box">
+        <h3>⚡ How to Play</h3>
+        <ul>
+          <li>Tap a card to reveal its symbol.</li>
+          <li>Reveal another card to find its pair.</li>
+          <li>Matching cards stay open.</li>
+          <li>Remember the locations of symbols.</li>
+          <li>Find every pair to finish the game.</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>🎮 Difficulty Levels</h3>
+        <ul>
+          <li><strong>Easy:</strong> 6 pairs (12 cards)</li>
+          <li><strong>Medium:</strong> 8 pairs (16 cards)</li>
+          <li><strong>Hard:</strong> 12 pairs (24 cards)</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>💡 Pro Tips</h3>
+        <p>Look carefully at each revealed card. Remember both the symbol and its position to make fewer moves.</p>
+      </div>
+
+      <div class="info-box">
+        <h3>🏆 Scoring</h3>
+        <p>Your score rewards matching pairs and efficient play. Finish quickly with fewer moves to aim for a higher score.</p>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<footer class="footer">
+  © 2026 <span>PixelRush</span> · Play smart. Play fair. Have fun.
+</footer>
+
+<script>
+(() => {
+  "use strict";
+
+  const board = document.getElementById("board");
+  const movesDisplay = document.getElementById("moves");
+  const timerDisplay = document.getElementById("timer");
+  const matchesDisplay = document.getElementById("matches");
+  const bestDisplay = document.getElementById("best");
+  const statusDisplay = document.getElementById("gameStatus");
+  const resultBanner = document.getElementById("resultBanner");
+  const resultText = document.getElementById("resultText");
+  const newGameBtn = document.getElementById("newGameBtn");
+  const resetBestBtn = document.getElementById("resetBestBtn");
+  const levelButtons = [...document.querySelectorAll("[data-level]")];
+
+  const symbols = [
+    "🚀", "🎮", "👾", "💎", "⚡", "🔥",
+    "🌙", "⭐", "🎯", "🧩", "🛸", "🎧"
+  ];
+
+  const BEST_PREFIX = "pixelrush_memory_best_v1_";
+
+  let difficulty = "easy";
+  let cards = [];
+  let firstCard = null;
+  let secondCard = null;
+  let lockBoard = false;
+  let moves = 0;
+  let matches = 0;
+  let seconds = 0;
+  let timerInterval = null;
+  let started = false;
+  let finished = false;
+  let mismatchTimeout = null;
+
+  function pairCount() {
+    return difficulty === "easy" ? 6 : difficulty === "medium" ? 8 : 12;
+  }
+
+  function bestKey() {
+    return BEST_PREFIX + difficulty;
+  }
+
+  function getBest() {
+    try {
+      const value = Number(localStorage.getItem(bestKey()));
+      return Number.isFinite(value) && value > 0 ? value : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function saveBest(value) {
+    try {
+      localStorage.setItem(bestKey(), String(value));
+    } catch {
+      // Continue playing if storage is unavailable.
+    }
+  }
+
+  function formatTime(totalSeconds) {
+    const minutes = Math.floor(totalSeconds / 60);
+    const secondsPart = totalSeconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(secondsPart).padStart(2, "0")}`;
+  }
+
+  function calculateScore() {
+    // Higher score for more matches and fewer moves / less time.
+    return Math.max(
+      0,
+      matches * 100 - Math.max(0, moves - matches) * 5 - seconds
+    );
+  }
+
+  function updateStats() {
+    movesDisplay.textContent = moves;
+    timerDisplay.textContent = formatTime(seconds);
+    matchesDisplay.textContent = `${matches}/${pairCount()}`;
+
+    const best = getBest();
+    bestDisplay.textContent = best === null ? "—" : best;
+  }
+
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function stopTimer() {
+    if (timerInterval !== null) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }
+
+  function startTimer() {
+    if (started) return;
+
+    started = true;
+
+    timerInterval = setInterval(() => {
+      if (finished) return;
+      seconds++;
+      timerDisplay.textContent = formatTime(seconds);
+    }, 1000);
+  }
+
+  function makeCard(symbol, index) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "card";
+    button.dataset.index = String(index);
+    button.dataset.symbol = symbol;
+    button.setAttribute("aria-label", `Hidden card ${index + 1}`);
+
+    button.innerHTML = `
+      <span class="card-inner">
+        <span class="card-face card-back" aria-hidden="true">?</span>
+        <span class="card-face card-front" aria-hidden="true">${symbol}</span>
+      </span>
+    `;
+
+    button.addEventListener("click", () => flipCard(button));
+    return button;
+  }
+
+  function newGame() {
+    stopTimer();
+
+    if (mismatchTimeout !== null) {
+      clearTimeout(mismatchTimeout);
+      mismatchTimeout = null;
+    }
+
+    moves = 0;
+    matches = 0;
+    seconds = 0;
+    started = false;
+    finished = false;
+    lockBoard = false;
+    firstCard = null;
+    secondCard = null;
+
+    resultBanner.classList.remove("show");
+    statusDisplay.textContent = "Find all matching pairs to win!";
+
+    const selectedSymbols = shuffle([...symbols]).slice(0, pairCount());
+    const deck = shuffle([...selectedSymbols, ...selectedSymbols]);
+
+    cards = deck;
+    board.innerHTML = "";
+    board.style.gridTemplateColumns =
+      difficulty === "hard" ? "repeat(4, minmax(0, 1fr))" :
+      "repeat(4, minmax(0, 1fr))";
+
+    deck.forEach((symbol, index) => {
+      board.appendChild(makeCard(symbol, index));
+    });
+
+    levelButtons.forEach(button => {
+      button.classList.toggle("active", button.dataset.level === difficulty);
+    });
+
+    updateStats();
+  }
+
+  function flipCard(card) {
+    if (
+      lockBoard ||
+      finished ||
+      card.classList.contains("flipped") ||
+      card.classList.contains("matched")
+    ) {
+      return;
+    }
+
+    startTimer();
+
+    card.classList.add("flipped");
+    card.setAttribute("aria-label", `Card ${Number(card.dataset.index) + 1}: ${card.dataset.symbol}`);
+
+    if (!firstCard) {
+      firstCard = card;
+      statusDisplay.textContent = "Choose a second card...";
+      return;
+    }
+
+    secondCard = card;
+    moves++;
+    updateStats();
+
+    if (firstCard.dataset.symbol === secondCard.dataset.symbol) {
+      firstCard.classList.add("matched");
+      secondCard.classList.add("matched");
+      firstCard.disabled = true;
+      secondCard.disabled = true;
+
+      firstCard.setAttribute("aria-label", `Matched ${firstCard.dataset.symbol}`);
+      secondCard.setAttribute("aria-label", `Matched ${secondCard.dataset.symbol}`);
+
+      matches++;
+      updateStats();
+
+      firstCard = null;
+      secondCard = null;
+
+      statusDisplay.textContent = "✨ Perfect match! Find another pair.";
+
+      if (matches === pairCount()) {
+        finishGame();
+      }
+    } else {
+      lockBoard = true;
+      statusDisplay.textContent = "Not a match. Remember these symbols!";
+
+      mismatchTimeout = setTimeout(() => {
+        if (firstCard && secondCard) {
+          firstCard.classList.remove("flipped");
+          secondCard.classList.remove("flipped");
+
+          firstCard.setAttribute("aria-label", `Hidden card ${Number(firstCard.dataset.index) + 1}`);
+          secondCard.setAttribute("aria-label", `Hidden card ${Number(secondCard.dataset.index) + 1}`);
+        }
+
+        firstCard = null;
+        secondCard = null;
+        lockBoard = false;
+        mismatchTimeout = null;
+        statusDisplay.textContent = "Try another pair!";
+      }, 750);
+    }
+  }
+
+  function finishGame() {
+    finished = true;
+    stopTimer();
+
+    const score = calculateScore();
+    const oldBest = getBest();
+    const newRecord = oldBest === null || score > oldBest;
+
+    if (newRecord) {
+      saveBest(score);
+    }
+
+    updateStats();
+
+    resultText.textContent =
+      `Difficulty: ${difficulty.toUpperCase()} · ` +
+      `Time: ${formatTime(seconds)} · ` +
+      `Moves: ${moves} · Score: ${score}` +
+      (newRecord ? " · New personal best!" : "");
+
+    resultBanner.classList.add("show");
+    statusDisplay.textContent = "🏆 All pairs matched! Well played.";
+
+    try {
+      if (window.PixelRushGameManager) {
+        window.PixelRushGameManager.recordScore("memory-match", score);
+      }
+    } catch (error) {
+      console.warn("Score integration unavailable.", error);
+    }
+  }
+
+  levelButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      difficulty = button.dataset.level;
+      newGame();
+    });
+  });
+
+  newGameBtn.addEventListener("click", newGame);
+
+  resetBestBtn.addEventListener("click", () => {
+    try {
+      localStorage.removeItem(bestKey());
+    } catch {
+      // Best score display still refreshes.
+    }
+
+    updateStats();
+    statusDisplay.textContent = "Best score cleared for this difficulty.";
+  });
+
+  newGame();
+})();
+</script>
+</body>
+</html>

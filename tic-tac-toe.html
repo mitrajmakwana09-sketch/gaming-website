@@ -1,0 +1,755 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b18">
+<title>Tic Tac Toe | PixelRush</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #080b18;
+  --panel: #11172b;
+  --cyan: #00f5ff;
+  --pink: #ff3cac;
+  --purple: #9b5cff;
+  --text: #f3f6ff;
+  --muted: #9aa5c5;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 10% 10%, #16234b 0, transparent 38%),
+    radial-gradient(ellipse at 90% 85%, #341448 0, transparent 35%),
+    var(--bg);
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(#ffffff08 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff08 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+.navbar {
+  min-height: 76px;
+  padding: 15px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid #ffffff12;
+  background: #080b18d9;
+  backdrop-filter: blur(15px);
+}
+
+.logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 23px;
+  font-weight: 800;
+  color: var(--cyan);
+  text-decoration: none;
+  letter-spacing: 1px;
+  text-shadow: 0 0 18px #00f5ff70;
+}
+
+.logo span {
+  color: white;
+}
+
+.back-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color .25s;
+}
+
+.back-link:hover {
+  color: var(--cyan);
+}
+
+.page {
+  width: min(100% - 32px, 1040px);
+  margin: 42px auto;
+  animation: pageEnter .8s ease both;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 7px 15px;
+  border: 1px solid #00f5ff45;
+  border-radius: 30px;
+  color: var(--cyan);
+  background: #00f5ff0b;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(28px, 5vw, 48px);
+  margin: 17px 0 10px;
+  letter-spacing: 1px;
+}
+
+h1 span {
+  color: var(--cyan);
+  text-shadow: 0 0 25px #00f5ff45;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.game-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.panel {
+  background: linear-gradient(145deg, #151c33eF, #0d1225f5);
+  border: 1px solid #ffffff14;
+  border-radius: 24px;
+  padding: 25px;
+  box-shadow: 0 20px 65px #0005;
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  width: 170px;
+  height: 170px;
+  top: -115px;
+  right: -70px;
+  background: var(--purple);
+  filter: blur(85px);
+  opacity: .22;
+  pointer-events: none;
+}
+
+.panel-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+.mode-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 5px;
+  border-radius: 13px;
+  background: #080b18;
+  margin-bottom: 22px;
+}
+
+.mode-btn {
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 11px 8px;
+  color: var(--muted);
+  background: transparent;
+  font: 500 12px 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.mode-btn.active {
+  color: var(--cyan);
+  border-color: #00f5ff40;
+  background: #00f5ff12;
+  box-shadow: inset 0 0 15px #00f5ff08;
+}
+
+.turn-box {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 13px;
+  border: 1px solid #ffffff10;
+  border-radius: 14px;
+  background: #ffffff04;
+}
+
+.turn-label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+#status {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+#status.x-turn {
+  color: var(--cyan);
+}
+
+#status.o-turn {
+  color: var(--pink);
+}
+
+.board {
+  width: min(100%, 390px);
+  aspect-ratio: 1;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.cell {
+  position: relative;
+  min-width: 0;
+  border-radius: 17px;
+  border: 1px solid #ffffff15;
+  background: linear-gradient(145deg, #1b2542, #10172d);
+  color: white;
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(36px, 8vw, 65px);
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .2s, border-color .2s, background .2s, box-shadow .2s;
+  overflow: hidden;
+}
+
+.cell:hover:enabled {
+  transform: translateY(-3px);
+  border-color: #00f5ff90;
+  background: #162b43;
+  box-shadow: 0 0 22px #00f5ff12;
+}
+
+.cell:focus-visible,
+button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 3px;
+}
+
+.cell.x {
+  color: var(--cyan);
+  text-shadow: 0 0 20px #00f5ff9c;
+  animation: markPop .3s cubic-bezier(.2, 1.6, .4, 1);
+}
+
+.cell.o {
+  color: var(--pink);
+  text-shadow: 0 0 20px #ff3cac9c;
+  animation: markPop .3s cubic-bezier(.2, 1.6, .4, 1);
+}
+
+.cell.winner {
+  border-color: #b8ff70;
+  background: #b8ff7018;
+  color: #c8ff94;
+  box-shadow: 0 0 25px #b8ff702d, inset 0 0 20px #b8ff7010;
+  animation: winnerPulse .7s ease-in-out infinite alternate;
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+.game-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.btn {
+  flex: 1;
+  padding: 13px 12px;
+  border-radius: 12px;
+  border: 1px solid #ffffff20;
+  background: #ffffff08;
+  color: white;
+  font: 600 12px 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--cyan);
+}
+
+.btn.primary {
+  background: linear-gradient(100deg, #00c8e8, #8b5cf6);
+  color: #080b18;
+  border: none;
+  box-shadow: 0 5px 22px #00d9ff25;
+}
+
+.btn.primary:hover {
+  box-shadow: 0 7px 28px #00d9ff55;
+}
+
+.scores {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.score-card {
+  text-align: center;
+  border-radius: 15px;
+  padding: 15px 5px;
+  background: #ffffff06;
+  border: 1px solid #ffffff10;
+}
+
+.score-card .symbol {
+  display: block;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.score-card.x-score .symbol { color: var(--cyan); }
+.score-card.o-score .symbol { color: var(--pink); }
+.score-card.draw-score .symbol { color: #b69aff; }
+
+.score-number {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 24px;
+}
+
+.score-name {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 5px;
+}
+
+.info-box {
+  padding: 17px;
+  border: 1px solid #9b5cff30;
+  background: #9b5cff0a;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+.info-box h3 {
+  color: #c5a7ff;
+  font-size: 13px;
+  margin-bottom: 9px;
+}
+
+.info-box p,
+.info-box li {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.info-box ul {
+  padding-left: 18px;
+}
+
+.result {
+  margin-top: 18px;
+  text-align: center;
+  min-height: 24px;
+  color: #b8ff70;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.footer {
+  text-align: center;
+  padding: 28px 15px;
+  color: #77819e;
+  font-size: 11px;
+}
+
+.footer span {
+  color: var(--cyan);
+}
+
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes markPop {
+  from { transform: scale(.5) rotate(-12deg); opacity: .3; }
+  to { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+@keyframes winnerPulse {
+  from { box-shadow: 0 0 10px #b8ff7020; }
+  to { box-shadow: 0 0 30px #b8ff7055; }
+}
+
+@media (max-width: 760px) {
+  .page { margin: 28px auto; }
+  .game-layout { grid-template-columns: 1fr; }
+  .panel { padding: 20px; }
+  .board { max-width: 360px; }
+}
+
+@media (max-width: 380px) {
+  .navbar { padding: 14px 5%; }
+  .logo { font-size: 19px; }
+  .panel { padding: 15px; }
+  .board { gap: 7px; }
+  .cell { border-radius: 12px; }
+  .game-buttons { flex-direction: column; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <a class="logo" href="../index.html">PIXEL<span>RUSH</span></a>
+  <a class="back-link" href="../games.html">← Back to Games</a>
+</header>
+
+<main class="page">
+
+  <section class="heading">
+    <span class="eyebrow">✦ ARCADE CLASSIC</span>
+    <h1>TIC TAC <span>TOE</span></h1>
+    <p class="subtitle">Think fast. Make your move. Own the grid.</p>
+  </section>
+
+  <section class="game-layout">
+
+    <div class="panel">
+      <h2 class="panel-title">🎮 GAME ARENA</h2>
+
+      <div class="mode-switch">
+        <button class="mode-btn active" id="twoPlayerBtn" type="button">
+          👥 2 Players
+        </button>
+        <button class="mode-btn" id="computerBtn" type="button">
+          🤖 vs Computer
+        </button>
+      </div>
+
+      <div class="turn-box" aria-live="polite">
+        <span class="turn-label">CURRENT STATUS</span>
+        <div id="status" class="x-turn">Player X's Turn</div>
+      </div>
+
+      <div class="board" id="board" role="group" aria-label="Tic Tac Toe board">
+        <button class="cell" data-index="0" aria-label="Cell 1" type="button"></button>
+        <button class="cell" data-index="1" aria-label="Cell 2" type="button"></button>
+        <button class="cell" data-index="2" aria-label="Cell 3" type="button"></button>
+        <button class="cell" data-index="3" aria-label="Cell 4" type="button"></button>
+        <button class="cell" data-index="4" aria-label="Cell 5" type="button"></button>
+        <button class="cell" data-index="5" aria-label="Cell 6" type="button"></button>
+        <button class="cell" data-index="6" aria-label="Cell 7" type="button"></button>
+        <button class="cell" data-index="7" aria-label="Cell 8" type="button"></button>
+        <button class="cell" data-index="8" aria-label="Cell 9" type="button"></button>
+      </div>
+
+      <div class="result" id="result" aria-live="polite"></div>
+
+      <div class="game-buttons">
+        <button class="btn primary" id="restartBtn" type="button">↻ New Round</button>
+        <button class="btn" id="resetBtn" type="button">⟲ Reset Scores</button>
+      </div>
+    </div>
+
+    <aside class="panel">
+      <h2 class="panel-title">🏆 MATCH SCORE</h2>
+
+      <div class="scores">
+        <div class="score-card x-score">
+          <span class="symbol">X</span>
+          <span class="score-number" id="xScore">0</span>
+          <span class="score-name">PLAYER X</span>
+        </div>
+
+        <div class="score-card draw-score">
+          <span class="symbol">＝</span>
+          <span class="score-number" id="drawScore">0</span>
+          <span class="score-name">DRAWS</span>
+        </div>
+
+        <div class="score-card o-score">
+          <span class="symbol">O</span>
+          <span class="score-number" id="oScore">0</span>
+          <span class="score-name" id="oPlayerLabel">PLAYER O</span>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <h3>⚡ How to Play</h3>
+        <ul>
+          <li>Choose 2 Players or vs Computer.</li>
+          <li>X takes the first turn.</li>
+          <li>Tap an empty square to place your mark.</li>
+          <li>Match three marks in a row, column or diagonal to win.</li>
+          <li>If all squares fill with no winner, it is a draw.</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>💎 Pro Tip</h3>
+        <p>Watch your opponent's next move. Block their winning line while building your own.</p>
+      </div>
+    </aside>
+
+  </section>
+</main>
+
+<footer class="footer">
+  © 2026 <span>PixelRush</span> · Play smart. Play fair. Have fun.
+</footer>
+
+<script>
+(() => {
+  "use strict";
+
+  const cells = [...document.querySelectorAll(".cell")];
+  const status = document.getElementById("status");
+  const result = document.getElementById("result");
+  const xScoreDisplay = document.getElementById("xScore");
+  const oScoreDisplay = document.getElementById("oScore");
+  const drawScoreDisplay = document.getElementById("drawScore");
+  const oPlayerLabel = document.getElementById("oPlayerLabel");
+  const twoPlayerBtn = document.getElementById("twoPlayerBtn");
+  const computerBtn = document.getElementById("computerBtn");
+
+  const winningLines = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
+  ];
+
+  let board = Array(9).fill("");
+  let currentPlayer = "X";
+  let gameOver = false;
+  let computerMode = false;
+  let scores = { X: 0, O: 0, draw: 0 };
+  let roundsPlayed = 0;
+
+  function updateScores() {
+    xScoreDisplay.textContent = scores.X;
+    oScoreDisplay.textContent = scores.O;
+    drawScoreDisplay.textContent = scores.draw;
+  }
+
+  function updateStatus(message, player = currentPlayer) {
+    status.textContent = message;
+    status.className = player === "O" ? "o-turn" : "x-turn";
+  }
+
+  function findWinner(state) {
+    for (const line of winningLines) {
+      const [a, b, c] = line;
+
+      if (state[a] && state[a] === state[b] && state[a] === state[c]) {
+        return { player: state[a], line };
+      }
+    }
+
+    return null;
+  }
+
+  function setMode(useComputer) {
+    computerMode = useComputer;
+    twoPlayerBtn.classList.toggle("active", !useComputer);
+    computerBtn.classList.toggle("active", useComputer);
+    oPlayerLabel.textContent = useComputer ? "COMPUTER" : "PLAYER O";
+    newRound();
+  }
+
+  function makeMove(index) {
+    if (gameOver || board[index]) return;
+    if (computerMode && currentPlayer === "O") return;
+
+    placeMark(index, currentPlayer);
+
+    if (gameOver) return;
+
+    if (computerMode && currentPlayer === "O") {
+      updateStatus("Computer is thinking...", "O");
+      setTimeout(() => {
+        if (!gameOver && currentPlayer === "O") {
+          const move = chooseComputerMove();
+          if (move !== -1) placeMark(move, "O");
+        }
+      }, 350);
+    }
+  }
+
+  function placeMark(index, player) {
+    if (gameOver || board[index]) return;
+
+    board[index] = player;
+    const cell = cells[index];
+
+    cell.textContent = player;
+    cell.classList.add(player.toLowerCase());
+    cell.setAttribute("aria-label", `Cell ${index + 1}: ${player}`);
+    cell.disabled = true;
+
+    const winningResult = findWinner(board);
+
+    if (winningResult) {
+      gameOver = true;
+      roundsPlayed++;
+
+      winningResult.line.forEach(i => cells[i].classList.add("winner"));
+
+      scores[player]++;
+      updateScores();
+
+      const winnerName = computerMode
+        ? (player === "X" ? "You win!" : "Computer wins!")
+        : `Player ${player} wins!`;
+
+      updateStatus(winnerName, player);
+      result.textContent = "✦ Victory! Great game.";
+
+      // Optional integration with the PixelRush game manager.
+      try {
+        if (player === "X" && window.PixelRushGameManager) {
+          window.PixelRushGameManager.recordScore("tic-tac-toe", 100);
+        }
+      } catch (error) {
+        console.warn("Score integration unavailable.", error);
+      }
+
+      return;
+    }
+
+    if (board.every(Boolean)) {
+      gameOver = true;
+      roundsPlayed++;
+      scores.draw++;
+      updateScores();
+      updateStatus("It's a draw!");
+      result.textContent = "🤝 Well played by both sides!";
+      return;
+    }
+
+    currentPlayer = player === "X" ? "O" : "X";
+
+    if (computerMode && currentPlayer === "O") {
+      updateStatus("Computer's turn...", "O");
+    } else {
+      updateStatus(
+        computerMode ? "Your turn (X)" : `Player ${currentPlayer}'s Turn`,
+        currentPlayer
+      );
+    }
+  }
+
+  // Computer chooses a winning move, blocks the player, or selects a strategic square.
+  function chooseComputerMove() {
+    const winningMove = findBestMove("O");
+    if (winningMove !== -1) return winningMove;
+
+    const blockingMove = findBestMove("X");
+    if (blockingMove !== -1) return blockingMove;
+
+    if (!board[4]) return 4;
+
+    const corners = [0, 2, 6, 8].filter(i => !board[i]);
+    if (corners.length) {
+      return corners[Math.floor(Math.random() * corners.length)];
+    }
+
+    const available = board
+      .map((value, index) => value ? -1 : index)
+      .filter(index => index !== -1);
+
+    return available.length
+      ? available[Math.floor(Math.random() * available.length)]
+      : -1;
+  }
+
+  function findBestMove(player) {
+    for (let i = 0; i < 9; i++) {
+      if (board[i]) continue;
+
+      board[i] = player;
+      const wins = findWinner(board);
+      board[i] = "";
+
+      if (wins) return i;
+    }
+
+    return -1;
+  }
+
+  function newRound() {
+    board = Array(9).fill("");
+    currentPlayer = "X";
+    gameOver = false;
+    result.textContent = "";
+
+    cells.forEach((cell, index) => {
+      cell.textContent = "";
+      cell.disabled = false;
+      cell.className = "cell";
+      cell.setAttribute("aria-label", `Cell ${index + 1}`);
+    });
+
+    updateStatus(computerMode ? "Your turn (X)" : "Player X's Turn", "X");
+  }
+
+  function resetScores() {
+    scores = { X: 0, O: 0, draw: 0 };
+    roundsPlayed = 0;
+    updateScores();
+    newRound();
+    result.textContent = "Scores reset. Ready to play!";
+  }
+
+  cells.forEach((cell, index) => {
+    cell.addEventListener("click", () => makeMove(index));
+  });
+
+  twoPlayerBtn.addEventListener("click", () => setMode(false));
+  computerBtn.addEventListener("click", () => setMode(true));
+  document.getElementById("restartBtn").addEventListener("click", newRound);
+  document.getElementById("resetBtn").addEventListener("click", resetScores);
+
+  updateScores();
+  newRound();
+})();
+</script>
+
+</body>
+</html>
